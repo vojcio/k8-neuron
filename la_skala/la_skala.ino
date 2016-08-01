@@ -21,7 +21,6 @@
                          - Outputs status info to serial port and TFT (ILI9341 with SPI).
  *******************************************************************************************************************/
 
-//#include <UTFT.h>                                    // Library for the TFT display.
 #include <Wire.h>                                     // Library for the I2C communication.
 #include "Adafruit_MCP23008.h"                        // Library for the I/O expander.
 #include <RotaryEncoder.h>                            // Library for the encoder.
@@ -32,39 +31,24 @@ int energ_relays;                                     // Store the number of ene
 int energ_relays_old;                                 // Store the number of previously energized relays.
 int relay_delay;
 
-extern uint8_t BigFont[];
-
 Adafruit_MCP23008 mcp;
 
-#define mcp0 64                                       // First relay will attenuate by 64db.
-#define mcp1 32                                       // Second relay will attenuate by 32db.
-#define mcp2 16                                       // Third relay will attenuate by 16db.
-#define mcp3 8                                        // Fourth relay will attenuate by 8db.
-#define mcp4 4                                        // Fifth relay will attenuate by 4db.
-#define mcp5 2                                        // Sixth relay will attenuate by 2db.
-#define mcp6 1                                        // Seventh relay will attenuate by 1db.
-#define mcp7 0.5                                      // Eighth relay will attenuate by 0.5db.
-
+float mcpRef[8] = {64, 32, 16, 8, 4, 2, 1, 0.5}; // First relay will attenuate by 64db, Eighth relay will attenuate by 0.5db.
 boolean relay[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 
-//memset(relay, 0, sizeof(relay));
-
-int VOLUPPIN = 'A3';           // RotEnc A terminal for right rotary encoder.
-int VOLDOWNPIN = 'A2';         // RotEnc B terminal for right rotary encoder.
+int VOLUPPIN = 'A3';              // RotEnc A terminal for right rotary encoder.
+int VOLDOWNPIN = 'A2';            // RotEnc B terminal for right rotary encoder.
 
 RotaryEncoder encoder(VOLDOWNPIN, VOLUPPIN);       // Setup the first Rotary Encoder
 
+float vol_temp_2;
 void setup() {
 
-  mcp.begin();                                // use default address 0
-  mcp.pinMode(0, OUTPUT);
-  mcp.pinMode(1, OUTPUT);
-  mcp.pinMode(2, OUTPUT);
-  mcp.pinMode(3, OUTPUT);
-  mcp.pinMode(4, OUTPUT);
-  mcp.pinMode(5, OUTPUT);
-  mcp.pinMode(6, OUTPUT);
-  mcp.pinMode(7, OUTPUT);
+mcp.begin();                      // use default address 0
+
+for(int i = 0; i<8; i++) {        // Set all pin's to OUTPUT mode
+    mcp.pinMode(i, OUTPUT);
+}
 
   setVol(volume);                 // Set the attenuation at its default value. Must be as close to the beginning of the code as possible to avoid audio spikes at start-up.
 
@@ -76,10 +60,10 @@ void setup() {
   Serial.begin(115200);
 }
 
+// main loop
 void loop() {
-
     setVol(calcChange());
-  }
+}
 
 
 int calcChange() {
@@ -107,24 +91,23 @@ int calcChange() {
   }
 }
 
-void setVol(float volume_temp)              // Set the volume by controlling the 8 relays.
+void setVol(float volume_received)              // Set the volume by controlling the 8 relays.
 {
-  if (volume_temp != volume_old) {
+  if (volume_received != volume_old) {
     Serial.print("Setting volume to: ");
-    Serial.println(volume_temp);
+    Serial.println(volume_received);
     energ_relays = 0;
-    float vol_temp_2 = volume_temp;
+    vol_temp_2 = volume_received;
 
     for (int i = 0 ; i < 8 ; i++)
     {
-      if (volume_temp >= mcp0)
+      if (volume_received >= mcpRef[i])
       {
         relay[i] = 1;
         energ_relays++;
-        volume_temp = volume_temp - mcp0;
-        Serial.println(volume_temp);
-      } else
-      {
+        volume_received = volume_received - mcpRef[i];
+        Serial.println(volume_received);
+      } else {
         relay[i] = 0;
       }
     }
@@ -155,36 +138,34 @@ void setVol(float volume_temp)              // Set the volume by controlling the
 
     energ_relays_old = energ_relays;
 
-    if (vol_temp_2 > volume_old)                                    // If we are increasing the attenuation
-    {
-      for (int i ; i < 8 ; i++)
-      {
-        Serial.println("Increasing the attenuation");
-        if (relay[i] == 0)
+    if (vol_temp_2 > volume_old)
+      decVol();
+    if (vol_temp_2 < volume_old)
+      incVol();     
+    else 
+    Serial.println("Error! Unexpected behaviour");
+  }
+}
+  void incVol() {
+    for (int i ; i < 8 ; i++) {
+      Serial.println("Increasing the attenuation");
+      if (relay[i] == 0)
         {
           mcp.digitalWrite(i, LOW);
         }
         else mcp.digitalWrite(i, HIGH);
       }
       volume_old = vol_temp_2;
-    }
-
-    if (vol_temp_2 < volume_old)                                  // If we are decreasing the attenuation
-    {  
-      for (int i ; i > 8 ; i--)
-      {
-        Serial.println("Decreasing the attenuation");
-        if (relay[i] == 0)
-        {
-          mcp.digitalWrite(i, LOW);
-        }
-        else mcp.digitalWrite(i, HIGH);
-
-        delay(relay_delay);
-        volume_old = vol_temp_2;
-      }
-    }
   }
-}
 
-
+  void decVol() {
+    for (int i ; i > 8 ; i--) {
+      Serial.println("Decreasing the attenuation");
+      if (relay[i] == 0) {
+        mcp.digitalWrite(i, LOW);
+      }
+      else mcp.digitalWrite(i, HIGH);
+      delay(relay_delay);
+    }
+      volume_old = vol_temp_2;
+  }
