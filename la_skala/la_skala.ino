@@ -60,11 +60,13 @@ for(int i = 0; i<8; i++) {        // Set all pin's to OUTPUT mode
   Serial.begin(115200);
 }
 
-// main loop
-void loop() {
-    setVol(calcChange());
+void loop() {                                                             // main loop
+    setVol(calcChange());                                                 // calculate change in volume and finish loop, or:
+    energRel();                                                           // count the delay
+    if (vol_temp_2 > volume_old) decVol();                                // decrease
+    if (vol_temp_2 < volume_old) incVol();                                // or increase volume
+    else Serial.println("Error! Unexpected behaviour");                   // or handle error
 }
-
 
 int calcChange() {
   static int pos = 0;                        // Read the rotary encoder and increase or decrease attenuation.
@@ -111,7 +113,10 @@ void setVol(float volume_received)              // Set the volume by controlling
         relay[i] = 0;
       }
     }
+  }
+}
 
+int energRel() {
     Serial.print("Difference in switched relays: ");                  // Determine how many relays will be switching states. Useful to predict the current load imposed on the power supply.
     Serial.println(abs(energ_relays_old - energ_relays));
 
@@ -137,14 +142,6 @@ void setVol(float volume_received)              // Set the volume by controlling
     }
 
     energ_relays_old = energ_relays;
-
-    if (vol_temp_2 > volume_old)
-      decVol();
-    if (vol_temp_2 < volume_old)
-      incVol();     
-    else 
-    Serial.println("Error! Unexpected behaviour");
-  }
 }
   void incVol() {
     for (int i ; i < 8 ; i++) {
