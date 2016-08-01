@@ -41,7 +41,7 @@ for(int i = 0; i<8; i++) {                                                // Set
     mcp.pinMode(i, OUTPUT);
 }
 
-  setVol(volume);                                                         // Set the attenuation at its default value.
+  setVol(volume);                                                         // Set the attenuation at its default value.   TODO: check if this will work
                                                                           // Must be as close to the beginning of the code as possible to avoid audio spikes at start-up.
                                                       
   pinMode(VOLUPPIN, INPUT);                                               // Button switch or Encoder pin for volume up
@@ -52,12 +52,15 @@ for(int i = 0; i<8; i++) {                                                // Set
   Serial.begin(115200);
 }
 
-void loop() {                                                             // main loop
-    setVol(calcChange());                                                 // calculate change in volume and finish loop, or:
+void loop() {                                                             // MAIN LOOP
+  float newVol = calcChange();                                            // Calculate a volume change
+  if (newVol != volume_old) {                                             // if volume has changed proceed, else finish main loop TODO: why do we need so many global variables, need cleanup
+    setVol(newVol);                                                       // calculate change in volume and finish loop, or:
     energRel();                                                           // count the delay
     if (vol_temp_2 > volume_old) decVol();                                // decrease
     if (vol_temp_2 < volume_old) incVol();                                // or increase volume
-    else Serial.println("Error! Unexpected behaviour");                   // or handle error
+    else Serial.println("Error! Unexpected behaviour");                   // or handle error TODO: set volume to some default to avoid deadend...
+  }
 }
 
 int calcChange() {
@@ -87,7 +90,7 @@ int calcChange() {
 
 void setVol(float volume_received)                                        // Set the volume by controlling the 8 relays.
 {
-  if (volume_received != volume_old) {
+  
     Serial.print("Setting volume to: ");
     Serial.println(volume_received);
     energ_relays = 0;
@@ -105,11 +108,11 @@ void setVol(float volume_received)                                        // Set
         relay[i] = 0;
       }
     }
-  }
+
 }
 
 int energRel() {
-    int diff = energ_relays_old - energ_relays;                           // count how many relays will be switched
+    int diff = energ_relays_old - energ_relays;                           // count how many relays will be switched TODO: maybe it is possible to count the "1s" in array? and avoid this complicated function
 
     Serial.print("Difference in switched relays: ");                      // Determine how many relays will be switching states.
     Serial.println(diff);                                                 // Useful to predict the current load imposed on the power supply.
@@ -122,7 +125,7 @@ int energRel() {
 
     energ_relays_old = energ_relays;
 }
-void incVol() {
+void incVol() {                                         // TODO: create a class? 
   for (int i ; i < 8 ; i++) {
     Serial.println("Increasing the attenuation");
     if (relay[i] == 0)
