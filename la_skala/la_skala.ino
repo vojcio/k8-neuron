@@ -24,7 +24,7 @@ boolean serialLog = 1;                                                    // Ena
 int logLevel = 1;                                                         // Possible log levels: 1 - Notice, 2 - Error, 3 - disable logging
 // config end
 
-const int ERR = 1;                                                             // constants to indicate logLevels
+const int ERR = 1;                                                        // constants to indicate logLevels
 const int NOTICE = 2;
 
 float volume_old = 1000;                                                  // Store old volume.
@@ -76,20 +76,15 @@ int calcChange() {
   static int pos = 0;                                                     // Read the rotary encoder and increase or decrease attenuation.
   encoder.tick();
   int newPos = encoder.getPosition();
-  if (pos != newPos)
-  {
-    if (pos < newPos)
-    {
-      if (volume > 0)
-      {
+  if (pos != newPos) {
+    if (pos < newPos) {
+      if (volume > 0) {
         volume = volume - 0.5;
       }
       pos = newPos;
     }
-    else if (pos > newPos)
-    {
-      if (volume < 127)
-      {
+    else if (pos > newPos) {
+      if (volume < 127) {
         volume = volume + 0.5;
       }
       pos = newPos;
@@ -160,8 +155,8 @@ void decVol() {
 
 void mBus(int mLevel,String message, String variable) {
   String logType = "Unknown logLevel: ";
-  if (logLevel < 3) {                                             // check if message have one of the supported logLevels
-    if (mLevel <= logLevel) {                                     // check if message should be logged
+  if (logLevel < 3) {                                              // check if message have one of the supported logLevels
+    if (mLevel <= logLevel) {                                      // check if message should be logged
       switch (mLevel) { 
         case 2:
           logType = "Error: ";
