@@ -16,8 +16,17 @@
 #include <Wire.h>                                                         // Library for the I2C communication.
 #include "Adafruit_MCP23008.h"                                            // Library for the I/O expander.
 #include <RotaryEncoder.h>                                                // Library for the encoder.
+#include "Arduino.h"                                                      // Basic Arduino library 
 
+// config
 float volume = 10;                                                        // Default attenuation.
+boolean serialLog = 1;                                                    // Enables or disables logging to serial output
+int logLevel = 1;                                                         // Possible log levels: 1 - Notice, 2 - Error, 3 - disable logging
+// config end
+
+const int ERR = 1;                                                             // constants to indicate logLevels
+const int NOTICE = 2;
+
 float volume_old = 1000;                                                  // Store old volume.
 int energ_relays;                                                         // Store the number of energized relays.
 int energ_relays_old;                                                     // Store the number of previously energized relays.
@@ -59,7 +68,7 @@ void loop() {                                                             // MAI
     energRel();                                                           // count the delay
     if (vol_temp_2 > volume_old) decVol();                                // decrease
     if (vol_temp_2 < volume_old) incVol();                                // or increase volume
-    else Serial.println("Error! Unexpected behaviour");                   // or handle error TODO: set volume to some default to avoid deadend...
+    else mBus(ERR, "Unknown volume used: ", String(vol_temp_2));                                           // or handle error TODO: set volume to some default to avoid deadend...
   }
 }
 
@@ -88,11 +97,9 @@ int calcChange() {
   }
 }
 
-void setVol(float volume_received)                                        // Set the volume by controlling the 8 relays.
-{
-  
-    Serial.print("Setting volume to: ");
-    Serial.println(volume_received);
+void setVol(float volume_received) {                                       // Set the volume by controlling the 8 relays.
+
+    mBus(NOTICE, "Setting volume to: ", String(volume_received));
     energ_relays = 0;
     vol_temp_2 = volume_received;
 
@@ -103,7 +110,7 @@ void setVol(float volume_received)                                        // Set
         relay[i] = 1;
         energ_relays++;
         volume_received = volume_received - mcpRef[i];
-        Serial.println(volume_received);
+        mBus(NOTICE, "Volume will be set to: ", String(volume_received));
       } else {
         relay[i] = 0;
       }
@@ -114,8 +121,8 @@ void setVol(float volume_received)                                        // Set
 int energRel() {
     int diff = energ_relays_old - energ_relays;                           // count how many relays will be switched TODO: maybe it is possible to count the "1s" in array? and avoid this complicated function
 
-    Serial.print("Difference in switched relays: ");                      // Determine how many relays will be switching states.
-    Serial.println(diff);                                                 // Useful to predict the current load imposed on the power supply.
+    mBus(NOTICE, "Difference in switched relays: ", String(diff));        // Determine how many relays will be switching states.
+                                                                          // Useful to predict the current load imposed on the power supply.
 
     if (diff <= 3) { relay_delay = 0; }                                   // When a large number of relays is expected to switch states,
     if (diff == 4) { relay_delay = 5; }                                   // introduce a delay between activations to ease the burden
@@ -127,24 +134,45 @@ int energRel() {
 }
 void incVol() {                                         // TODO: create a class? 
   for (int i ; i < 8 ; i++) {
-    Serial.println("Increasing the attenuation");
     if (relay[i] == 0)
       {
         mcp.digitalWrite(i, LOW);
+        mBus(NOTICE, "(increasingVol ; Scheduling relay to disable: ", String(relay[i]));
       }
       else mcp.digitalWrite(i, HIGH);
+      mBus(NOTICE, "(increasingVol ; Scheduling relay to enable: ", String(relay[i]));
    }
    volume_old = vol_temp_2;
 }
 
 void decVol() {
   for (int i ; i > 8 ; i--) {
-    Serial.println("Decreasing the attenuation");
     if (relay[i] == 0) {
       mcp.digitalWrite(i, LOW);
+      mBus(NOTICE, "(decreaseingVol ; Scheduling relay to disable: ", String(relay[i]));
     }
     else mcp.digitalWrite(i, HIGH);
+    mBus(NOTICE, "(decreaseingVol ; Scheduling relay to enable: ", String(relay[i]));
     delay(relay_delay);
   }
   volume_old = vol_temp_2;
+}
+
+void mBus(int mLevel,String message, String variable) {
+  String logType = "Unknown logLevel: ";
+  if (logLevel < 3) {                                             // check if message have one of the supported logLevels
+    if (mLevel <= logLevel) {                                     // check if message should be logged
+      switch (mLevel) { 
+        case 2:
+          logType = "Error: ";
+        break;
+        default:
+          logType = "Notice: ";
+        break;
+      }
+      
+      if (serialLog == 1 )  Serial.println(logType + message + variable);      // check if logger type enabled and push message
+        // Add new logers here
+    }
+  }
 }
