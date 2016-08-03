@@ -9,12 +9,14 @@
 #include <RotaryEncoder.h>
 #include "Log.h"
 
-Volume::Volume(int VOLDOWNPIN, int VOLUPPIN, int logLevel, boolean serialLog) : encoder(VOLDOWNPIN, VOLUPPIN), mBus(logLevel, serialLog) {
+Volume::Volume(int VOLDOWNPIN, int VOLUPPIN, float resVals[], const int logLevel, const boolean serialLog) : encoder(VOLDOWNPIN, VOLUPPIN), mBus(logLevel, serialLog) {
 
 	pinMode(VOLUPPIN, INPUT);                                               // Button switch or Encoder pin for volume up
   	digitalWrite(VOLUPPIN, HIGH);                                           // If H/W debouncing is implemented, set to LOW
   	pinMode(VOLDOWNPIN, INPUT);                                             // Button switch or Encoder pin for volume down
   	digitalWrite(VOLDOWNPIN, HIGH);                                         // If H/W debouncing is implemented, set to LOW
+//	_resVals[8] = resVals;
+	memcpy( _resVals, resVals, 8 );
 
 }
 
@@ -35,21 +37,21 @@ int Volume::calc(float volume) {
     }
     pos = newPos;
   }
+  return volume;
 }
 
-void Volume::set() {
-    mBus.info("Setting volume to: ", String(volume_received));
+void Volume::set(float volume) {
+    mBus.info("Setting volume to: ", String(volume));
     energ_relays = 0;
-    vol_temp_2 = volume_received;
 
     for (int i = 0 ; i < 8 ; i++)
     {
-      if (volume_received >= mcpRef[i])
+      if (volume_received >= resVals[i])
       {
         relay[i] = 1;
         energ_relays++;
-        volume_received = volume_received - mcpRef[i];
-        mBus.info("Volume will be set to: ", String(volume_received));
+        volume_received = volume_received - resVals[i];
+        mBus.info("Volume will be set to: ", String(volume));
       } else {
         relay[i] = 0;
       }

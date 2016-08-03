@@ -15,17 +15,18 @@
 class Volume
 {
   public:
-    Volume(int VOLDOWNPIN, int VOLUPPIN, int logLevel, boolean serialLog);
+    Volume(int VOLDOWNPIN, int VOLUPPIN, float resVals[], const int logLevel, const boolean serialLog);
     int calc(float volume);
-    void set();
+    void set(float volume);
     void increase();
     void decrease();
   private:
     RotaryEncoder encoder;
     Log mBus;
-    float volume;
-    int logLevel;
-    boolean serialLog;
+//    float volume;
+//    int logLevel;
+//    boolean serialLog;
+    float _resVals[];
 };
 
 #endif

@@ -19,14 +19,13 @@
 #include "Volume.h"                                                       // Volume attenuator library
 #include "Log.h"
 
-
-
 // config
 const int volUpPin = 'A3';                                                 // RotEnc A terminal for right rotary encoder.
 const int volDownPin = 'A2';                                               // RotEnc B terminal for right rotary encoder.
 float volume = 10;                                                         // Default attenuation.
 const boolean serialLog = 1;                                               // Enables or disables logging to serial output
-const int logLevel = 1;                                                    // Possible log levels: 1 - Info, 2 - Error, 3 - disable logging                                     
+const int logLevel = 1;                                                    // Possible log levels: 1 - Info, 2 - Error, 3 - disable logging 
+float resVals[8] = {64, 32, 16, 8, 4, 2, 1, 0.5};                          // First relay will attenuate by 64db, Eighth relay will attenuate by 0.5db.                                    
 // config end
 
 float volume_old = 1000;                                                  // Store old volume.
@@ -35,11 +34,9 @@ int energ_relays_old;                                                     // Sto
 int relay_delay;
 
 Adafruit_MCP23008 mcp;
-Volume vol(volDownPin, volUpPin, logLevel, serialLog);                                           // Construct volume attenuation class
-Log mBus(logLevel, serialLog);
+Volume vol(volDownPin, volUpPin, resVals, logLevel, serialLog);                                           // Construct volume attenuation class
+Log mBus(logLevel, serialLog); 
 
- 
-float mcpRef[8] = {64, 32, 16, 8, 4, 2, 1, 0.5};                          // First relay will attenuate by 64db, Eighth relay will attenuate by 0.5db.
 boolean relay[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 
 float vol_temp_2;
@@ -60,8 +57,11 @@ for(int i = 0; i<8; i++) {                                                // Set
 }
 
 void loop() {                                                             // MAIN LOOP
+float newVol = vol.calc(volume);
+if (newVol != volume) {
+  vol.set(newVol);
 
-  vol.calc(volume);
+}
   
 //  vol.prep
 //  vol.change
