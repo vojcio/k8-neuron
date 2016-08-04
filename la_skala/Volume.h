@@ -1,8 +1,8 @@
 /*
    La Skala Attenuator: A ladder-type volume attenuator with Arduino control.
-   Rewriten version of original project by dimdim.gr:
+   Heavily rewritten version of original project by dimdim.gr:
    Original Project Page: http://www.dimdim.gr/diyaudio/la-skala-attenuator/
-   Fork mainentained by vojcio: https://github.com/vojcio/laskala
+   Mainentained by vojcio: https://github.com/vojcio/laskala
 */
 
 #ifndef Volume_h
