@@ -10,7 +10,7 @@
 #include "Log.h"
 #include "Adafruit_MCP23008.h"                                            // Library for the I/O expander.
 
-Volume::Volume(int VOLDOWNPIN, int VOLUPPIN, float resVals[], const int logLevel, const boolean serialLog, float volume) : encoder(VOLDOWNPIN, VOLUPPIN), mBus(logLevel, serialLog), mcp() {
+Volume::Volume(int VOLDOWNPIN, int VOLUPPIN, float resVals[], const int logLevel, const boolean serialLog) : encoder(VOLDOWNPIN, VOLUPPIN), mBus(logLevel, serialLog), mcp() {
 
 	pinMode(VOLUPPIN, INPUT);                                               // Button switch or Encoder pin for volume up
   	digitalWrite(VOLUPPIN, HIGH);                                           // If H/W debouncing is implemented, set to LOW
@@ -22,7 +22,7 @@ Volume::Volume(int VOLDOWNPIN, int VOLUPPIN, float resVals[], const int logLevel
 	boolean _relay[8] = {0, 0, 0, 0, 0, 0, 0, 0};				// relays status
 	mcp.begin();                                                            // use default address 0
 	for(int i = 0; i<8; i++) { mcp.pinMode(i, OUTPUT); }                    // Set all pin's to OUTPUT mode
-	float _volume = volume;
+	float _volume = 0;
 }
 
 int Volume::readRotEnc() {

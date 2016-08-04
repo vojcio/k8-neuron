@@ -27,7 +27,7 @@ const int logLevel = 1;                                                    // Po
 float resVals[8] = {64, 32, 16, 8, 4, 2, 1, 0.5};                          // First relay will attenuate by 64db, Eighth relay will attenuate by 0.5db.                                    
 // config end
 
-Volume vol(volDownPin, volUpPin, resVals, logLevel, serialLog, initialVolume);                                           // Construct volume attenuation class
+Volume vol(volDownPin, volUpPin, resVals, logLevel, serialLog);                                           // Construct volume attenuation class
 Log mBus(logLevel, serialLog); 
 
 

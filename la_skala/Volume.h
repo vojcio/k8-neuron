@@ -16,7 +16,7 @@
 class Volume
 {
   public:
-    Volume(int VOLDOWNPIN, int VOLUPPIN, float resVals[], const int logLevel, const boolean serialLog, float volume);
+    Volume(int VOLDOWNPIN, int VOLUPPIN, float resVals[], const int logLevel, const boolean serialLog);
     int readRotEnc();
     void set(float volume);
     void change(int newPos);
