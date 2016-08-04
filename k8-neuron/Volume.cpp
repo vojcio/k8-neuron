@@ -4,6 +4,7 @@
    Original Project Page: http://www.dimdim.gr/diyaudio/la-skala-attenuator/
    Mainentained by vojcio: https://github.com/vojcio/laskala
 */
+
 #include "Arduino.h"
 #include "Volume.h"
 #include <RotaryEncoder.h>
