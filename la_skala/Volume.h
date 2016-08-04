@@ -10,23 +10,29 @@
 
 #include "Arduino.h"
 #include <RotaryEncoder.h>                                                // Library for the encoder.
-#include "Log.h"
+#include "Log.h"							  // Logging message bus
+#include "Adafruit_MCP23008.h"                                            // Library for the I/O expander.
 
 class Volume
 {
   public:
-    Volume(int VOLDOWNPIN, int VOLUPPIN, float resVals[], const int logLevel, const boolean serialLog);
-    int calc(float volume);
+    Volume(int VOLDOWNPIN, int VOLUPPIN, float resVals[], const int logLevel, const boolean serialLog, float volume);
     void set(float volume);
-    void increase();
-    void decrease();
+    void change(int newPos);
+    int readRotEnc();
   private:
     RotaryEncoder encoder;
     Log mBus;
-//    float volume;
-//    int logLevel;
-//    boolean serialLog;
+    Adafruit_MCP23008 mcp;
+    void increase();
+    void decrease();
     float _resVals[];
+    int _changeRelaysCurrent;
+    int _changeRelaysPrev;
+    int _relDelay;
+    int relDelay();
+    boolean _relay[];
+    float _volume;
 };
 
 #endif
