@@ -14,9 +14,9 @@
 Volume::Volume(int VOLDOWNPIN, int VOLUPPIN, float resVals[], const int logLevel, const boolean serialLog) : encoder(VOLDOWNPIN, VOLUPPIN), mBus(logLevel, serialLog), mcp() {
 
 	pinMode(VOLUPPIN, INPUT);                                               // Button switch or Encoder pin for volume up
-  	digitalWrite(VOLUPPIN, HIGH);                                           // If H/W debouncing is implemented, set to LOW
-  	pinMode(VOLDOWNPIN, INPUT);                                             // Button switch or Encoder pin for volume down
-  	digitalWrite(VOLDOWNPIN, HIGH);                                         // If H/W debouncing is implemented, set to LOW
+  digitalWrite(VOLUPPIN, HIGH);                                           // If H/W debouncing is implemented, set to LOW
+  pinMode(VOLDOWNPIN, INPUT);                                             // Button switch or Encoder pin for volume down
+  digitalWrite(VOLDOWNPIN, HIGH);                                         // If H/W debouncing is implemented, set to LOW
 	memcpy( _resVals, resVals, 8 );
 	int _changeRelaysCurrent = 0;						// number of relays to be changed
 	int _changeRelaysPrev = 0;
