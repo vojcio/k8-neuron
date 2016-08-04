@@ -1,16 +1,11 @@
 /*******************************************************************************************************************
-   La Skala Attenuator: A ladder-type volume attenuator with Arduino control.
+ K8 Neutron is intended to be a fully featured, open source and open hardware pre-amplifier 
 
-   Rewriten version of original project by dimdim.gr:
-   Original Project Page: http://www.dimdim.gr/diyaudio/la-skala-attenuator/
+ project by vojcio: https://github.com/vojcio/k8-neuron
 
-   Fork mainentained by vojcio   : https://github.com/vojcio/laskala
-
-   v1.00    01/08/2016 : - forked by vojcio, revision controll moved to GitHub
-
-   v0.52    30/05/2016 : - Bug fixes. Everything seems to be working OK.
-                         - First public release.
-                         - Commented out TFT code to make code fit in an UNO.
+ credits: 
+ Volume atenuator algorithm originally from: http://www.dimdim.gr/diyaudio/la-skala-attenuator/
+ 
  *******************************************************************************************************************/
 
 #include <Wire.h>                                                         // Library for the I2C communication.
