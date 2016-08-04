@@ -32,25 +32,14 @@ Log mBus(logLevel, serialLog);
 
 
 void setup() {
-   Serial.begin(115200);                                                     // TODO: move this to Log class?????
-}
-
-void loop() {                                                             // MAIN LOOP
-
-  int newVol = vol.readRotEnc();
-  vol.change(newVol);                         // volChange can get value for which volume schould be changed
- 
-//float newVol = vol.calc(volume);
-//if (newVol != volume) {
-//  vol.set(newVol);
-}
   
-//  float newVol = calcChange();                                            // Calculate a volume change
-//  if (newVol != volume_old) {                                             // if volume has changed proceed, else finish main loop TODO: why do we need so many global variables, need cleanup
-//    setVol(newVol);                                                       // calculate change in volume and finish loop, or:
-//    energRel();                                                           // count the delay
-//    if (vol_temp_2 > volume_old) decVol();                                // decrease
-//    if (vol_temp_2 < volume_old) incVol();                                // or increase volume
-//      else mBus.info("Volume setting wrong!: ", String(vol_temp_2));          // or handle error TODO: set volume to some default to avoid deadend...
-//    }
-//}
+  vol.set(initialVolume);                                                             //setup starting volume, as fast at it can, to avoid noises
+
+}
+
+void loop() {                                                               // MAIN LOOP
+  
+  int newVol = vol.readRotEnc();                                            // Read the Rotary Encoder change
+  vol.change(newVol);                                                       // volChange can get value for which volume schould be changed
+  
+}

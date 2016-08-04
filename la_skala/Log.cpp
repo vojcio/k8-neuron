@@ -9,8 +9,12 @@
 
 Log::Log(int logLevel, boolean serialLog) {
 
-	_serialLog = serialLog;
-	_logLevel = logLevel;
+  _serialLog = serialLog;
+  _logLevel = logLevel;
+  if (_serialLog == 1) {
+    Serial.begin(115200);                                                     // TODO: move this to Log class?????
+  }
+
 }
 
 /// Logging bus
