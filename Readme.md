@@ -1,6 +1,6 @@
 # K8 Neutron 
 ## About
-Project intended to be a fully futured, easily extenseble, open-source, open-hardware preamplifier.
+Project intended to be a fully featured, easily expandable, open-source, open-hardware preamplifier.
 
 ## Credits
 Owner: Wojciech Krysmann (vojcio) https://w.krysmann.pl/
