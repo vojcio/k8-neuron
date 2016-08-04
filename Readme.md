@@ -1,4 +1,7 @@
-Rewriten version of original project by dimdim.gr:
-Original Project Page: http://www.dimdim.gr/diyaudio/la-skala-attenuator/ 
+# K8 Neutron 
+## About
+Project intended to be a fully futured, easily extenseble, open-source, open-hardware preamplifier.
 
-Fork mainentained by vojcio   : https://github.com/vojcio/laskala
+## Credits
+Owner: Wojciech Krysmann (vojcio) https://w.krysmann.pl/
+Volume attenuator original algorithm: http://www.dimdim.gr/diyaudio/la-skala-attenuator/
