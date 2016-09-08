@@ -9,19 +9,16 @@
 #define Volume_h
 
 #include "Arduino.h"
-#include <RotaryEncoder.h>                                                // Library for the encoder.
-#include "Log.h"							  // Logging message bus
+#include "Log.h"							                                            // Logging message bus
 #include "Adafruit_MCP23008.h"                                            // Library for the I/O expander.
 
 class Volume
 {
   public:
-    Volume(int VOLDOWNPIN, int VOLUPPIN, float resVals[], const int logLevel, const boolean serialLog);
-    int readRotEnc();
+    Volume(float resVals[], const int logLevel, const boolean serialLog);
     void set(float volume);
     void change(int newPos);
   private:
-    RotaryEncoder encoder;
     Log mBus;
     Adafruit_MCP23008 mcp;
     void increase();
