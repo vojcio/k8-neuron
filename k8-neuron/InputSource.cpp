@@ -13,8 +13,10 @@ InputSource::InputSource(const int logLevel, const boolean serialLog) : mBus(log
 }
 
 
-void InputSource::change(int newPos) {                                         // Calculating the change based on reading from different inputs
+void InputSource::set(int newPos) {                                         // Calculating the change based on reading from different inputs
 
-    mBus.error("Rotary encoder unknown change: ", String(newPos));  
+
 
 }
+
+

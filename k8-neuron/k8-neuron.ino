@@ -14,36 +14,39 @@
 #include "Inputs.h"                                                       // Controll the inputs
 #include "InputSource.h"                                                  // Input Source selector
 #include "Log.h"
+#include "Eprom.h"                                                        // Library to controll Eeprom
+
 
 // config
 const int volUpPin = 'A3';                                                 // RotEnc A terminal for right rotary encoder.
 const int volDownPin = 'A2';                                               // RotEnc B terminal for right rotary encoder.
 const int srcUpPin = 'A5';                                                 // RotEnc A terminal for right rotary encoder.
 const int srcDownPin = 'A4';                                               // RotEnc B terminal for right rotary encoder.
-float initialVolume = 10;                                                  // Default attenuation.
 const boolean serialLog = 1;                                               // Enables or disables logging to serial output
 const int logLevel = 1;                                                    // Possible log levels: 1 - Info, 2 - Error, 3 - disable logging 
 float resVals[8] = {64, 32, 16, 8, 4, 2, 1, 0.5};                          // First relay will attenuate by 64db, Eighth relay will attenuate by 0.5db.                                    
 // config end
 
-const int volume = 1;
+const int volume = 1;                                                       // constants to point classes (inputs class, eeprom class) to valid execution
 const int source = 2;
 
 Volume vol(resVals, logLevel, serialLog);                                  // Construct volume attenuation class
 InputSource inSrc(logLevel, serialLog);                                    // Construct input source class
 Inputs in(volDownPin, volUpPin, srcUpPin, srcDownPin, logLevel, serialLog);                      // Construct inputs 
 Log mBus(logLevel, serialLog);                                             // Construct log/message bus class
-
+Eprom eprom(logLevel, serialLog);                                   // Construct class to use eeprom
 
 void setup() {
-  
-  vol.set(initialVolume);                                                   //setup starting volume, as fast at it can, to avoid noises
+  vol.set(eprom.get(volume));                                                   //setup starting volume, as fast as it can be, to avoid noises
+  inSrc.set(eprom.get(source));                                                 //setup starting input, as fast as it can be, to avoid unexpected behaviour
 
 }
 
 void loop() {                                                               // MAIN LOOP
   
-  vol.change(in.getChange(volume));                                        // read rotary encoder and set a new volume
-  inSrc.change(in.getChange(source));                                      // read rotary encoder and set a new input source
+  vol.change(in.getChange(volume));                                         // read rotary encoder and set a new volume
+  int newSrc = in.getChange(source)                                         // read rotatory encoder
+  inSrc.change(newSrc);                                                     // set a new input source
+  eprom.save(source, newSrc);                                                        // save to eeprom
   
 }
