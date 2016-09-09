@@ -15,14 +15,15 @@ class Inputs
 
   public:
     Inputs(int VOLDOWNPIN, int VOLUPPIN, int SRCDOWNPIN, int SRCUPPIN, const int logLevel, const boolean serialLog);
-    int getChange(int ofWhat);
-    int change;
+    int getVolChange();
+    int getSrcChange();
   private:
     RotaryEncoder VolEncoder;
     RotaryEncoder SrcEncoder;
     Log mBus;
     int readRotEncVol();
     int readRotEncSrc();
+    void volChange();
 
 };
 #endif

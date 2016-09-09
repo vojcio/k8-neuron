@@ -13,7 +13,7 @@
 #include "Volume.h"                                                       // Volume attenuator library
 #include "Inputs.h"                                                       // Controll the inputs
 #include "InputSource.h"                                                  // Input Source selector
-#include "Log.h"
+#include "Log.h"                                                          // Logging class
 #include "Eprom.h"                                                        // Library to controll Eeprom
 
 
@@ -34,7 +34,7 @@ Volume vol(resVals, logLevel, serialLog);                                  // Co
 InputSource inSrc(logLevel, serialLog);                                    // Construct input source class
 Inputs in(volDownPin, volUpPin, srcUpPin, srcDownPin, logLevel, serialLog);                      // Construct inputs 
 Log mBus(logLevel, serialLog);                                             // Construct log/message bus class
-Eprom eprom(logLevel, serialLog);                                   // Construct class to use eeprom
+Eprom eprom(source, logLevel, serialLog);                        // Construct class to use eeprom
 
 void setup() {
   vol.set(eprom.get(volume));                                                   //setup starting volume, as fast as it can be, to avoid noises
@@ -44,9 +44,7 @@ void setup() {
 
 void loop() {                                                               // MAIN LOOP
   
-  vol.change(in.getChange(volume));                                         // read rotary encoder and set a new volume
-  int newSrc = in.getChange(source)                                         // read rotatory encoder
-  inSrc.change(newSrc);                                                     // set a new input source
-  eprom.save(source, newSrc);                                                        // save to eeprom
+  vol.change(in.getVolChange());                                         // read rotary encoder and set a new volume
+  inSrc.set(in.getSrcChange());                                                     // set a new input source
   
 }

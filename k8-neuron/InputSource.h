@@ -8,15 +8,19 @@
 
 #include "Arduino.h"
 #include "Log.h"
+#include "Eprom.h"                                                        // Library to controll Eeprom
 
 class InputSource 
 {
 
   public:
-    InputSource(const int logLevel, const boolean serialLog);
-    void change(int newPos);
+    InputSource(const int source, const int logLevel, const boolean serialLog);
+    void set(int newPos);
+    int get();
   private:
     Log mBus;
+    Eprom eprom;
+    int _source;
 
 };
 #endif

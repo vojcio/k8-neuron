@@ -23,17 +23,22 @@ Eprom::Eprom(const int logLevel, const boolean serialLog) : mBus(logLevel, seria
 void Eprom::save(int what, int val) {      //TODO: validate it better...
   if (val < 255) {
     if (val > 0) {
-      EEPROM.write(what, val);
+      int val2;
+      EEPROM.get(what, val2);
+      if (val2 != val) {
+        EEPROM.write(what, val);         // TODO: do not use write!!! why update does not work???
+      }
     }
   }
 }
 
-void Eprom::get(int what) {
+int Eprom::get(int what) {
         mBus.info("getting value from eeprom: ", String(what));
         
         int val;
         EEPROM.get(what, val);
         
         mBus.info("value is: ", String (val));
+        return val;
 }
 

@@ -17,7 +17,7 @@ class Eprom
   public:
     Eprom(const int logLevel, const boolean serialLog);
     void save(int what, int val);
-    void get(int what);
+    int get(int what);
   private:
     Log mBus;
 

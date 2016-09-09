@@ -32,34 +32,29 @@ int Inputs::readRotEncSrc() {
   return SrcEncoder.getPosition();
 }
 
-int Inputs::getChange(int ofWhat) {
-
-      int change = 0;
-      switch (ofWhat) {
-        case 1:
-          mBus.info("reading if volume should be changed...", "");
-          change = readRotEncVol();                           // sum all inputs
-        break;
-        case 2:
-          mBus.info("reading if source should be changed...", "");
-          change = readRotEncSrc();                           // sum all inputs
-        break;
-        default:
-          mBus.error("Didn't recognized what input should be changed.", "");
-        break;
-      }
+int Inputs::getVolChange() {
+      mBus.info("reading if volume should be changed...", "");
+      
+      int _change = readRotEncVol();                           // sum all inputs
       // we will return 1 or -1
-      if (change =! 0) {
-        if (change > 0) {
-          change = 1;
+      if (_change =! 0) {
+        if (_change > 0) {
+          _change = 1;
         }
-        else if (change < 0) {
-          change = -1;
+        else if (_change < 0) {
+          _change = -1;
         }
       }
-      return change;
+    return _change;
 }
 
+int Inputs::getSrcChange() {
+          int _change = 0;
+            mBus.info("reading if source should be changed...", "");
+            
+          _change = readRotEncSrc();                           // sum all inputs
 
+     return _change;
+}
 
 
