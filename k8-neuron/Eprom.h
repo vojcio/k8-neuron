@@ -20,6 +20,5 @@ class Eprom
     int get(int what);
   private:
     Log mBus;
-
 };
 #endif

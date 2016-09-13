@@ -34,17 +34,20 @@ Volume vol(resVals, logLevel, serialLog);                                  // Co
 InputSource inSrc(logLevel, serialLog);                                    // Construct input source class
 Inputs in(volDownPin, volUpPin, srcUpPin, srcDownPin, logLevel, serialLog);                      // Construct inputs 
 Log mBus(logLevel, serialLog);                                             // Construct log/message bus class
-Eprom eprom(source, logLevel, serialLog);                        // Construct class to use eeprom
+Eprom eprom(logLevel, serialLog);                                          // Construct class to use eeprom
 
 void setup() {
-  vol.set(eprom.get(volume));                                                   //setup starting volume, as fast as it can be, to avoid noises
-  inSrc.set(eprom.get(source));                                                 //setup starting input, as fast as it can be, to avoid unexpected behaviour
+  Serial.begin(9600);
+  Serial.println("Hello world!");
+  vol.set(eprom.get(volume));                                              //setup starting volume, as fast as it can be, to avoid noises
+  inSrc.set(eprom.get(source));                                            //setup starting input, as fast as it can be, to avoid unexpected behaviour
 
 }
 
 void loop() {                                                               // MAIN LOOP
-  
-  vol.change(in.getVolChange());                                         // read rotary encoder and set a new volume
-  inSrc.set(in.getSrcChange());                                                     // set a new input source
+  Serial.println("test");
+  mBus.info("test", "test");
+  vol.change(in.getVolChange());                                            // read rotary encoder and set a new volume
+  inSrc.set(in.getNewSource());                                             // set a new input source
   
 }

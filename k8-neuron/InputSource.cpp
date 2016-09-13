@@ -9,21 +9,17 @@
 #include "Log.h"
 #include "Eprom.h"                                                        // Library to controll Eeprom
 
-InputSource::InputSource(const int source, const int logLevel, const boolean serialLog) : eprom(logLevel, serialLog), mBus(logLevel, serialLog) {
-    _source = source;
-}
-
-void InputSource::set(int newPos) {                                         // Calculating the change based on reading from different inputs
-  mBus.info("Setting source to: ", String(newPos));
-  int oldPos = get();
-    if (newPos != oldPos)
-
-    eprom.save(_source, newPos);                                                        // save to eeprom
+InputSource::InputSource(const int logLevel, const boolean serialLog) : eprom(logLevel, serialLog), mBus(logLevel, serialLog) {
 
 }
 
-int InputSource::get() {
-  
-  return eprom.get(_source);; 
+void InputSource::set(int newSource) {                                         // Calculating the change based on reading from different inputs
+  mBus.info("Setting source to: ", String(newSource));
+  int oldPos = eprom.get(2);
+    if (newSource != oldPos)
+
+    eprom.save(2, newSource);                                                        // save to eeprom
+    //TODO: mcp...
+
 }
 

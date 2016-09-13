@@ -9,6 +9,7 @@
 #include "Arduino.h"
 #include "Log.h"
 #include <RotaryEncoder.h>                                                // Library for the encoder.
+#include "Eprom.h"
 
 class Inputs
 {
@@ -16,14 +17,16 @@ class Inputs
   public:
     Inputs(int VOLDOWNPIN, int VOLUPPIN, int SRCDOWNPIN, int SRCUPPIN, const int logLevel, const boolean serialLog);
     int getVolChange();
-    int getSrcChange();
+    int getNewSource();
   private:
     RotaryEncoder VolEncoder;
     RotaryEncoder SrcEncoder;
     Log mBus;
+    Eprom eprom;
     int readRotEncVol();
     int readRotEncSrc();
     void volChange();
+    int readSerial();
 
 };
 #endif

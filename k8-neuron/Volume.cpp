@@ -87,7 +87,7 @@ void Volume::decrease() {
 }
 
 int Volume::relDelay() {
-    int diff = _changeRelaysCurrent - _changeRelaysPrev;         // count how many relays will be switched TODO: maybe it is possible to count the "1s" in array? and avoid this complicated function
+    int diff = _changeRelaysCurrent - _changeRelaysPrev;                // count how many relays will be switched TODO: maybe it is possible to count the "1s" in array? and avoid this complicated function
   int _relDelay = 0;
 
     mBus.info("Difference in switched relays: ", String(diff));        // Determine how many relays will be switching states.

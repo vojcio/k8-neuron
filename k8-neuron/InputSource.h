@@ -14,9 +14,8 @@ class InputSource
 {
 
   public:
-    InputSource(const int source, const int logLevel, const boolean serialLog);
-    void set(int newPos);
-    int get();
+    InputSource(const int logLevel, const boolean serialLog);
+    void set(const int source);
   private:
     Log mBus;
     Eprom eprom;

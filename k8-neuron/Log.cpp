@@ -11,7 +11,7 @@ Log::Log(int logLevel, boolean serialLog) {
 
   _serialLog = serialLog;
   _logLevel = logLevel;
-  if (_serialLog == 1) { Serial.begin(115200); }
+  if (_serialLog == 1) { Serial.begin(9600); }
 
 }
 
