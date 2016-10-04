@@ -15,7 +15,7 @@
 class Volume
 {
   public:
-    Volume(float resVals[], const int logLevel, const boolean serialLog);
+    Volume(float resVals[]);
     void set(float volume);
     void change(int newPos);
   private:

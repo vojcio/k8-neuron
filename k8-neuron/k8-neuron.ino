@@ -16,38 +16,37 @@
 #include "Log.h"                                                          // Logging class
 #include "Eprom.h"                                                        // Library to controll Eeprom
 
-
 // config
 const int volUpPin = 'A3';                                                 // RotEnc A terminal for right rotary encoder.
 const int volDownPin = 'A2';                                               // RotEnc B terminal for right rotary encoder.
 const int srcUpPin = 'A5';                                                 // RotEnc A terminal for right rotary encoder.
 const int srcDownPin = 'A4';                                               // RotEnc B terminal for right rotary encoder.
+// logging conf
 const boolean serialLog = 1;                                               // Enables or disables logging to serial output
-const int logLevel = 1;                                                    // Possible log levels: 1 - Info, 2 - Error, 3 - disable logging 
+const int logLevel = 3;                                                    // Possible log levels: 1 - Error, 2 - Notice, 3 - Debug - disable logging
+const int baudRate = 9600;                                                 // Serial baud rate setting, default = 9600
 float resVals[8] = {64, 32, 16, 8, 4, 2, 1, 0.5};                          // First relay will attenuate by 64db, Eighth relay will attenuate by 0.5db.                                    
 // config end
 
 const int volume = 1;                                                       // constants to point classes (inputs class, eeprom class) to valid execution
 const int source = 2;
 
-Volume vol(resVals, logLevel, serialLog);                                  // Construct volume attenuation class
-InputSource inSrc(logLevel, serialLog);                                    // Construct input source class
-Inputs in(volDownPin, volUpPin, srcUpPin, srcDownPin, logLevel, serialLog);                      // Construct inputs 
-Log mBus(logLevel, serialLog);                                             // Construct log/message bus class
-Eprom eprom(logLevel, serialLog);                                          // Construct class to use eeprom
+//Volume vol(resVals);                                  // Construct volume attenuation class
+InputSource inSrc;                                    // Construct input source class
+Inputs in(volDownPin, volUpPin, srcUpPin, srcDownPin);                      // Construct inputs 
+Log mBus;                                             // Construct log/message bus class
+Eprom eprom;                                          // Construct class to use eeprom
 
 void setup() {
-  Serial.begin(9600);
-  Serial.println("Hello world!");
-  vol.set(eprom.get(volume));                                              //setup starting volume, as fast as it can be, to avoid noises
-  inSrc.set(eprom.get(source));                                            //setup starting input, as fast as it can be, to avoid unexpected behaviour
+  mBus.configure(logLevel, serialLog, baudRate);
+  mBus.debug("Passed message bus configure with loglevel ", String(logLevel));
+//  vol.set(eprom.get(volume));                                              mBus.debug("setup starting volume, as fast as it can be, to avoid noises", "");
+//  inSrc.set(eprom.get(source));                                            mBus.debug("setup starting input, as fast as it can be, to avoid unexpected behaviour");
 
-}
-
-void loop() {                                                               // MAIN LOOP
-  Serial.println("test");
-  mBus.info("test", "test");
-  vol.change(in.getVolChange());                                            // read rotary encoder and set a new volume
-  inSrc.set(in.getNewSource());                                             // set a new input source
+mBus.info("MAIN LOOP BEGINS!!", ""); }
+void loop() {
+  mBus.debug("loop", "");
+    //  vol.change(in.getVolChange());                                        mBus.debug("Read rotary encoder and set a new volume", "");
+    inSrc.set(in.getNewSource());                                             //mBus.debug("Setting a new input source", "");
   
 }

@@ -9,7 +9,7 @@
 #include "Log.h"
 #include "Eprom.h"                                                        // Library to controll Eeprom
 
-InputSource::InputSource(const int logLevel, const boolean serialLog) : eprom(logLevel, serialLog), mBus(logLevel, serialLog) {
+InputSource::InputSource() : eprom(), mBus() {
 
 }
 

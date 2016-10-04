@@ -12,7 +12,9 @@
 class Log
 {
   public:
-    Log(int logLevel, boolean serialLog) ;
+    Log();
+    void configure(int logLevel, boolean serialLog, int _baudRate);
+    void debug(String message, String variable);
     void info(String message, String variable);
     void error(String message, String variable);
   private:

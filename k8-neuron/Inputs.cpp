@@ -8,7 +8,7 @@
 #include "Eprom.h"
 #include <RotaryEncoder.h>
 
-Inputs::Inputs(int VOLDOWNPIN, int VOLUPPIN, int SRCDOWNPIN, int SRCUPPIN, const int logLevel, const boolean serialLog) : VolEncoder(VOLDOWNPIN, VOLUPPIN), SrcEncoder(SRCDOWNPIN, SRCUPPIN), mBus(logLevel, serialLog), eprom(logLevel, serialLog) {
+Inputs::Inputs(int VOLDOWNPIN, int VOLUPPIN, int SRCDOWNPIN, int SRCUPPIN) : VolEncoder(VOLDOWNPIN, VOLUPPIN), SrcEncoder(SRCDOWNPIN, SRCUPPIN), mBus(), eprom() {
 
   pinMode(VOLUPPIN, INPUT);                                               // Button switch or Encoder pin for volume up
   digitalWrite(VOLUPPIN, HIGH);                                           // If H/W debouncing is implemented, set to LOW

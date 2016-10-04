@@ -10,9 +10,9 @@
 #include "Log.h"
 #include "Adafruit_MCP23008.h"                                            // Library for the I/O expander.
 
-Volume::Volume(float resVals[], const int logLevel, const boolean serialLog) : mBus(logLevel, serialLog), mcp() {
+Volume::Volume(float resVals[]) : mBus(), mcp() {
 
-	memcpy( _resVals, resVals, 8 );
+	memcpy(_resVals, resVals, 8);
 	int _changeRelaysCurrent = 0;						                                // number of relays to be changed
 	int _changeRelaysPrev = 0;
 	boolean _relay[8] = {0, 0, 0, 0, 0, 0, 0, 0};				                    // relays status

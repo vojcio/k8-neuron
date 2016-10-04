@@ -14,7 +14,7 @@ class InputSource
 {
 
   public:
-    InputSource(const int logLevel, const boolean serialLog);
+    InputSource();
     void set(const int source);
   private:
     Log mBus;

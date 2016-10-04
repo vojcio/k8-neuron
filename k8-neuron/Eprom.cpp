@@ -8,7 +8,7 @@
 #include "Log.h"
 #include <EEPROM.h>
 
-Eprom::Eprom(const int logLevel, const boolean serialLog) : mBus(logLevel, serialLog) {
+Eprom::Eprom() : mBus() {
 
     int tmp;
     EEPROM.get(0, tmp);

@@ -15,7 +15,7 @@ class Inputs
 {
 
   public:
-    Inputs(int VOLDOWNPIN, int VOLUPPIN, int SRCDOWNPIN, int SRCUPPIN, const int logLevel, const boolean serialLog);
+    Inputs(int VOLDOWNPIN, int VOLUPPIN, int SRCDOWNPIN, int SRCUPPIN);
     int getVolChange();
     int getNewSource();
   private:

@@ -15,7 +15,7 @@ class Eprom
 {
 
   public:
-    Eprom(const int logLevel, const boolean serialLog);
+    Eprom();
     void save(int what, int val);
     int get(int what);
   private:
