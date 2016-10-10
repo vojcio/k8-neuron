@@ -17,10 +17,10 @@
 #include "Eprom.h"                                                        // Library to controll Eeprom
 
 // config
-const int volUpPin = 'A3';                                                 // RotEnc A terminal for right rotary encoder.
-const int volDownPin = 'A2';                                               // RotEnc B terminal for right rotary encoder.
-const int srcUpPin = 'A5';                                                 // RotEnc A terminal for right rotary encoder.
-const int srcDownPin = 'A4';                                               // RotEnc B terminal for right rotary encoder.
+const int volUpPin = '3';                                                 // RotEnc A terminal for right rotary encoder.
+const int volDownPin = '2';                                               // RotEnc B terminal for right rotary encoder.
+const int srcUpPin = '5';                                                 // RotEnc A terminal for right rotary encoder.
+const int srcDownPin = '4';                                               // RotEnc B terminal for right rotary encoder.
 // logging conf
 const boolean serialLog = 1;                                               // Enables or disables logging to serial output
 const int logLevel = 3;                                                    // Possible log levels: 1 - Error, 2 - Notice, 3 - Debug - disable logging
@@ -31,22 +31,32 @@ float resVals[8] = {64, 32, 16, 8, 4, 2, 1, 0.5};                          // Fi
 const int volume = 1;                                                       // constants to point classes (inputs class, eeprom class) to valid execution
 const int source = 2;
 
-//Volume vol(resVals);                                  // Construct volume attenuation class
-InputSource inSrc;                                    // Construct input source class
-Inputs in(volDownPin, volUpPin, srcUpPin, srcDownPin);                      // Construct inputs 
+float volChange = 0;
+int srcChange = 0;
+unsigned int maxSrc = 8;
+Volume vol(resVals, &volChange);                                  // Construct volume attenuation class
+InputSource inSrc(&srcChange, maxSrc);                                    // Construct input source class
+Inputs in(&volChange, &srcChange, volDownPin, volUpPin, srcUpPin, srcDownPin);                      // Construct inputs 
 Log mBus;                                             // Construct log/message bus class
 Eprom eprom;                                          // Construct class to use eeprom
 
 void setup() {
   mBus.configure(logLevel, serialLog, baudRate);
   mBus.debug("Passed message bus configure with loglevel ", String(logLevel));
+  //vol.initMcp();
 //  vol.set(eprom.get(volume));                                              mBus.debug("setup starting volume, as fast as it can be, to avoid noises", "");
 //  inSrc.set(eprom.get(source));                                            mBus.debug("setup starting input, as fast as it can be, to avoid unexpected behaviour");
 
 mBus.info("MAIN LOOP BEGINS!!", ""); }
 void loop() {
-  mBus.debug("loop", "");
-    //  vol.change(in.getVolChange());                                        mBus.debug("Read rotary encoder and set a new volume", "");
-    inSrc.set(in.getNewSource());                                             //mBus.debug("Setting a new input source", "");
-  
+/*  
+    if(in.getVolChange()) {
+      Serial.print("volume will change: "); Serial.println(volChange);
+      vol.change();
+    }
+    if(in.getSrcChange()) {
+      Serial.print("Source will change: "); Serial.println(srcChange);
+      inSrc.change();                                             //mBus.debug("Setting a new input source", "");
+    }
+    */
 }

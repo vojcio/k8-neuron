@@ -15,9 +15,10 @@
 class Volume
 {
   public:
-    Volume(float resVals[]);
+    Volume(float resVals[], float*);
     void set(float volume);
-    void change(int newPos);
+    void change();
+    void initMcp();
   private:
     Log mBus;
     Adafruit_MCP23008 mcp;
@@ -30,6 +31,7 @@ class Volume
     int relDelay();
     boolean _relay[];
     float _volume;
+    float* _volChange;
 };
 
 #endif

@@ -10,33 +10,25 @@
 #include "Log.h"
 #include "Adafruit_MCP23008.h"                                            // Library for the I/O expander.
 
-Volume::Volume(float resVals[]) : mBus(), mcp() {
+Volume::Volume(float resVals[], float* volChange) : mBus(), mcp() {
 
+  _volChange = volChange;
 	memcpy(_resVals, resVals, 8);
 	int _changeRelaysCurrent = 0;						                                // number of relays to be changed
 	int _changeRelaysPrev = 0;
 	boolean _relay[8] = {0, 0, 0, 0, 0, 0, 0, 0};				                    // relays status
-	mcp.begin();                                                            // use default address 0
-	for(int i = 0; i<8; i++) { mcp.pinMode(i, OUTPUT); }                    // Set all pin's to OUTPUT mode
 	float _volume = 0;
 }
 
-void Volume::change(int newPos) { 						                            // Calculating the change based on reading from different inputs
-  static int pos = 0;                                                     // Read the rotary encoder and increase or decrease attenuation.
-  if (pos != newPos) {
-    if (pos < newPos) {
-      if (_volume > 0) {
-        _volume = _volume - 0.5;
-      }
-    }
-    else if (pos > newPos) {
-      if (_volume < 127) {
-        _volume = _volume + 0.5;
-      } 
-    }
-  }
-  else {
-    mBus.error("Rotary encoder unknown change: ", String(newPos));  
+void Volume::initMcp() {
+  mcp.begin();                                                            // use default address 0
+  for(int i = 0; i<8; i++) { mcp.pinMode(i, OUTPUT); }                    // Set all pin's to OUTPUT mode
+}
+
+void Volume::change() { 						                            // Calculating the change based on reading from different inputs
+
+  if(_volume > 0 and _volume < 127) {
+    _volume += *_volChange;
   }
   set(_volume);
 }

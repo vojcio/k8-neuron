@@ -8,8 +8,11 @@
 #include "Eprom.h"
 #include <RotaryEncoder.h>
 
-Inputs::Inputs(int VOLDOWNPIN, int VOLUPPIN, int SRCDOWNPIN, int SRCUPPIN) : VolEncoder(VOLDOWNPIN, VOLUPPIN), SrcEncoder(SRCDOWNPIN, SRCUPPIN), mBus(), eprom() {
+Inputs::Inputs(float* volChange, int* srcChange, int VOLDOWNPIN, int VOLUPPIN, int SRCDOWNPIN, int SRCUPPIN) : VolEncoder(VOLDOWNPIN, VOLUPPIN), SrcEncoder(SRCDOWNPIN, SRCUPPIN), mBus(), eprom() {
 
+  _volChange = volChange;
+  _srcChange = srcChange;
+  
   pinMode(VOLUPPIN, INPUT);                                               // Button switch or Encoder pin for volume up
   digitalWrite(VOLUPPIN, HIGH);                                           // If H/W debouncing is implemented, set to LOW
   pinMode(VOLDOWNPIN, INPUT);                                             // Button switch or Encoder pin for volume down
@@ -29,46 +32,45 @@ int Inputs::readRotEncVol() {
 
 int Inputs::readRotEncSrc() {
   SrcEncoder.tick();
-  mBus.info("reading src rotary encoder", "");
-  int srcActual = eprom.get(2);                                         // get source
-  int srcChange = SrcEncoder.getPosition();
-  if (srcChange != 0) {
-    if (srcChange > 0) {
-      srcActual++;
-    } else {
-      srcActual--;
-    }
-    return srcActual;
-  }
+  return SrcEncoder.getPosition();
 }
 
-int Inputs::readSerial() {
+/*int Inputs::readSerialVol() {
   if (Serial.available() > 0) {
     return Serial.read();
   }
 }
-
-int Inputs::getVolChange() {
-      mBus.info("reading if volume should be changed...", "");
+*/
+bool Inputs::getVolChange() {
       
-      int _change = readRotEncVol();                           // sum all inputs
-      // we will return 1 or -1
-      if (_change =! 0) {
+      int _change = readRotEncVol();                           // sum all inputs here
+      
+      *_volChange = 0;                                        // reset variable
+      
+      if (_change != 0) {
         if (_change > 0) {
-          _change = 1;
+          *_volChange = 0.5;
         }
         else if (_change < 0) {
-          _change = -1;
+          *_volChange = -0.5;
         }
-      }
-    return _change;
+        return true;
+      } else { return false; }
 }
 
-int Inputs::getNewSource() {
-            mBus.info("reading if source should be changed...", "");
-           
+bool Inputs::getSrcChange() {      
 
-     return readRotEncSrc();
-}
+  int _change = readRotEncSrc();                            // sum all inputs here
 
+  *_srcChange = 0;
+  
+  if (_change != 0) {
+    if (_change > 0) {
+      *_srcChange = 1;
+     } else {
+      *_srcChange = -1;
+    }
+    return true;
+  } else { return false; }
+}  
 

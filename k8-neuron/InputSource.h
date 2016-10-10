@@ -14,12 +14,15 @@ class InputSource
 {
 
   public:
-    InputSource();
-    void set(const int source);
+    InputSource(int*, unsigned int);
+    void change();
   private:
     Log mBus;
     Eprom eprom;
-    int _source;
+    int* _srcChange;
+    unsigned int _maxSrc;
+    unsigned int _source;
+    void set();
 
 };
 #endif

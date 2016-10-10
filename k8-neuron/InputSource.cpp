@@ -9,17 +9,26 @@
 #include "Log.h"
 #include "Eprom.h"                                                        // Library to controll Eeprom
 
-InputSource::InputSource() : eprom(), mBus() {
-
+InputSource::InputSource(int* srcChange, unsigned int maxSrc) : eprom(), mBus() {
+  _srcChange = srcChange;
+  _source = 1;
+  _maxSrc = maxSrc;
 }
 
-void InputSource::set(int newSource) {                                         // Calculating the change based on reading from different inputs
-  mBus.info("Setting source to: ", String(newSource));
-  int oldPos = eprom.get(2);
-    if (newSource != oldPos)
+void InputSource::change() {
+  
+  _source += *_srcChange;
+  
+  if(_source <= 0) {
+    _source = _maxSrc;
+  }  else if(_source > _maxSrc) {
+    _source = 1;
+  }
+  set();
+        //eprom.save(2, newSource);                                                        // save to eeprom
+}
 
-    eprom.save(2, newSource);                                                        // save to eeprom
-    //TODO: mcp...
-
+void InputSource::set() {
+    // TODO: mcp
 }
 

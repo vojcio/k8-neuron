@@ -15,9 +15,9 @@ class Inputs
 {
 
   public:
-    Inputs(int VOLDOWNPIN, int VOLUPPIN, int SRCDOWNPIN, int SRCUPPIN);
-    int getVolChange();
-    int getNewSource();
+    Inputs(float*, int*, int, int, int, int);
+    bool getVolChange();
+    bool getSrcChange();
   private:
     RotaryEncoder VolEncoder;
     RotaryEncoder SrcEncoder;
@@ -25,8 +25,8 @@ class Inputs
     Eprom eprom;
     int readRotEncVol();
     int readRotEncSrc();
-    void volChange();
-    int readSerial();
+    float* _volChange;
+    int* _srcChange;
 
 };
 #endif
