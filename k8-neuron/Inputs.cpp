@@ -12,7 +12,7 @@ Inputs::Inputs(float* volChange, int* srcChange, int VOLDOWNPIN, int VOLUPPIN, i
 
   _volChange = volChange;
   _srcChange = srcChange;
-  
+
   pinMode(VOLUPPIN, INPUT);                                               // Button switch or Encoder pin for volume up
   digitalWrite(VOLUPPIN, HIGH);                                           // If H/W debouncing is implemented, set to LOW
   pinMode(VOLDOWNPIN, INPUT);                                             // Button switch or Encoder pin for volume down
@@ -22,7 +22,7 @@ Inputs::Inputs(float* volChange, int* srcChange, int VOLDOWNPIN, int VOLUPPIN, i
   digitalWrite(SRCUPPIN, HIGH);                                           // If H/W debouncing is implemented, set to LOW
   pinMode(SRCDOWNPIN, INPUT);                                             // Button switch or Encoder pin for src down
   digitalWrite(SRCDOWNPIN, HIGH);                                         // If H/W debouncing is implemented, set to LOW
-  
+
 }
 int Inputs::readRotEncVol() {
   VolEncoder.tick();
@@ -39,38 +39,42 @@ int Inputs::readRotEncSrc() {
   if (Serial.available() > 0) {
     return Serial.read();
   }
-}
+  }
 */
 bool Inputs::getVolChange() {
-      
-      int _change = readRotEncVol();                           // sum all inputs here
-      
-      *_volChange = 0;                                        // reset variable
-      
-      if (_change != 0) {
-        if (_change > 0) {
-          *_volChange = 0.5;
-        }
-        else if (_change < 0) {
-          *_volChange = -0.5;
-        }
-        return true;
-      } else { return false; }
+
+  int _change = readRotEncVol();                           // sum all inputs here
+
+  *_volChange = 0;                                        // reset variable
+
+  if (_change != 0) {
+    if (_change > 0) {
+      *_volChange = 0.5;
+    }
+    else if (_change < 0) {
+      *_volChange = -0.5;
+    }
+    return true;
+  } else {
+    return false;
+  }
 }
 
-bool Inputs::getSrcChange() {      
+bool Inputs::getSrcChange() {
 
   int _change = readRotEncSrc();                            // sum all inputs here
 
   *_srcChange = 0;
-  
+
   if (_change != 0) {
     if (_change > 0) {
       *_srcChange = 1;
-     } else {
+    } else {
       *_srcChange = -1;
     }
     return true;
-  } else { return false; }
-}  
+  } else {
+    return false;
+  }
+}
 

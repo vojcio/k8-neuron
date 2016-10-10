@@ -10,7 +10,7 @@
 #include "Log.h"
 #include "Eprom.h"                                                        // Library to controll Eeprom
 
-class InputSource 
+class InputSource
 {
 
   public:

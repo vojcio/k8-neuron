@@ -10,14 +10,14 @@
 
 Eprom::Eprom() : mBus() {
 
-    int tmp;
-    EEPROM.get(0, tmp);
-    if (tmp != 123) // our initial value for reference 
-    {   
-      EEPROM.write(0, 123);       // write our reference value
-      EEPROM.write(1, 10);        // set initial volume to 10
-      EEPROM.write(2, 1);         // set initialSrc to 1
-    }
+  int tmp;
+  EEPROM.get(0, tmp);
+  if (tmp != 123) // our initial value for reference
+  {
+    EEPROM.write(0, 123);       // write our reference value
+    EEPROM.write(1, 10);        // set initial volume to 10
+    EEPROM.write(2, 1);         // set initialSrc to 1
+  }
 }
 
 void Eprom::save(int what, int val) {      //TODO: validate it better...
@@ -33,12 +33,12 @@ void Eprom::save(int what, int val) {      //TODO: validate it better...
 }
 
 int Eprom::get(int what) {
-        mBus.info("getting value from eeprom: ", String(what));
-        
-        int val;
-        EEPROM.get(what, val);
-        
-        mBus.info("value is: ", String (val));
-        return val;
+  mBus.info("getting value from eeprom: ", String(what));
+
+  int val;
+  EEPROM.get(what, val);
+
+  mBus.info("value is: ", String (val));
+  return val;
 }
 

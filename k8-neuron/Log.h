@@ -3,7 +3,7 @@
    Originally created for pre-amplifier software, but written as a general use logging module, very lightweight.
    Mainentained by vojcio: https://github.com/vojcio/laskala
 */
- 
+
 #ifndef Log_h
 #define Log_h
 

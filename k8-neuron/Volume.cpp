@@ -13,57 +13,63 @@
 Volume::Volume(float resVals[], float* volChange) : mBus(), mcp() {
 
   _volChange = volChange;
-	memcpy(_resVals, resVals, 8);
-	int _changeRelaysCurrent = 0;						                                // number of relays to be changed
-	int _changeRelaysPrev = 0;
-	boolean _relay[8] = {0, 0, 0, 0, 0, 0, 0, 0};				                    // relays status
-	float _volume = 0;
+  memcpy(_resVals, resVals, 8);
+  int _changeRelaysCurrent = 0;						                                // number of relays to be changed
+  int _changeRelaysPrev = 0;
+  boolean _relay[8] = {0, 0, 0, 0, 0, 0, 0, 0};				                    // relays status
+  float _volume = 0;
 }
 
 void Volume::initMcp() {
   mcp.begin();                                                            // use default address 0
-  for(int i = 0; i<8; i++) { mcp.pinMode(i, OUTPUT); }                    // Set all pin's to OUTPUT mode
+  for (int i = 0; i < 8; i++) {
+    mcp.pinMode(i, OUTPUT);  // Set all pin's to OUTPUT mode
+  }
 }
 
 void Volume::change() { 						                            // Calculating the change based on reading from different inputs
 
-  if(_volume > 0 and _volume < 127) {
+  if (_volume > 0 and _volume < 127) {
     _volume += *_volChange;
   }
   set(_volume);
 }
 
 void Volume::set(float volume) {					// setting the volume to fixed value, between 0 and 127
-    mBus.info("Setting volume to: ", String(volume));
-    float volTemp = volume;
+  mBus.info("Setting volume to: ", String(volume));
+  float volTemp = volume;
 
-    for (int i = 0 ; i < 8 ; i++)
+  for (int i = 0 ; i < 8 ; i++)
+  {
+    if (volTemp >= _resVals[i])
     {
-      if (volTemp >= _resVals[i])
-      {
-        _relay[i] = 1;
-        _changeRelaysCurrent++;
-        volTemp = volTemp - _resVals[i];
-        mBus.info("Volume will be set to: ", String(volume));
-      } else {
-        _relay[i] = 0;
-      }
+      _relay[i] = 1;
+      _changeRelaysCurrent++;
+      volTemp = volTemp - _resVals[i];
+      mBus.info("Volume will be set to: ", String(volume));
+    } else {
+      _relay[i] = 0;
     }
+  }
 
-  if (volTemp > volume) { increase(); }
-  else if (volTemp < volume) { decrease(); }
+  if (volTemp > volume) {
+    increase();
+  }
+  else if (volTemp < volume) {
+    decrease();
+  }
 }
 
 void Volume::increase() {
   for (int i = 0; i < 8 ; i++) {
     if (_relay[i] == 0)
-      {
-        mcp.digitalWrite(i, LOW);
-        mBus.info("(increasingVol ; Scheduling relay to disable: ", String(_relay[i]));
-      }
-      else mcp.digitalWrite(i, HIGH);
-      mBus.info("(increasingVol ; Scheduling relay to enable: ", String(_relay[i]));
-   }
+    {
+      mcp.digitalWrite(i, LOW);
+      mBus.info("(increasingVol ; Scheduling relay to disable: ", String(_relay[i]));
+    }
+    else mcp.digitalWrite(i, HIGH);
+    mBus.info("(increasingVol ; Scheduling relay to enable: ", String(_relay[i]));
+  }
 }
 
 void Volume::decrease() {
@@ -79,19 +85,29 @@ void Volume::decrease() {
 }
 
 int Volume::relDelay() {
-    int diff = _changeRelaysCurrent - _changeRelaysPrev;                // count how many relays will be switched TODO: maybe it is possible to count the "1s" in array? and avoid this complicated function
+  int diff = _changeRelaysCurrent - _changeRelaysPrev;                // count how many relays will be switched TODO: maybe it is possible to count the "1s" in array? and avoid this complicated function
   int _relDelay = 0;
 
-    mBus.info("Difference in switched relays: ", String(diff));        // Determine how many relays will be switching states.
+  mBus.info("Difference in switched relays: ", String(diff));        // Determine how many relays will be switching states.
 
-    if (diff <= 3) { _relDelay = 0; }                                   // When a large number of relays is expected to switch states,
-    if (diff == 4) { _relDelay = 5; }                                   // introduce a delay between activations to ease the burden
-    if (diff == 5) { _relDelay = 10;}                                   // of the power supply (and decrease switching noise).
-    if (diff == 6) { _relDelay = 20;}
-    if (diff >= 7) { _relDelay = 50;}
+  if (diff <= 3) {
+    _relDelay = 0;  // When a large number of relays is expected to switch states,
+  }
+  if (diff == 4) {
+    _relDelay = 5;  // introduce a delay between activations to ease the burden
+  }
+  if (diff == 5) {
+    _relDelay = 10; // of the power supply (and decrease switching noise).
+  }
+  if (diff == 6) {
+    _relDelay = 20;
+  }
+  if (diff >= 7) {
+    _relDelay = 50;
+  }
 
-    mBus.info("Inrtoducing delay of: ", String(_relDelay));
+  mBus.info("Inrtoducing delay of: ", String(_relDelay));
 
-    _changeRelaysPrev = _changeRelaysCurrent;
-    return _relDelay;
+  _changeRelaysPrev = _changeRelaysCurrent;
+  return _relDelay;
 }

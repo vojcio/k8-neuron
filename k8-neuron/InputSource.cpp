@@ -16,19 +16,19 @@ InputSource::InputSource(int* srcChange, unsigned int maxSrc) : eprom(), mBus() 
 }
 
 void InputSource::change() {
-  
+
   _source += *_srcChange;
-  
-  if(_source <= 0) {
+
+  if (_source <= 0) {
     _source = _maxSrc;
-  }  else if(_source > _maxSrc) {
+  }  else if (_source > _maxSrc) {
     _source = 1;
   }
   set();
-        //eprom.save(2, newSource);                                                        // save to eeprom
+  //eprom.save(2, newSource);                                                        // save to eeprom
 }
 
 void InputSource::set() {
-    // TODO: mcp
+  // TODO: mcp
 }
 
