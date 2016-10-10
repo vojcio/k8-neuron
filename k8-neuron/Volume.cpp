@@ -31,6 +31,7 @@ void Volume::change() { 						                            // Calculating the cha
 
   *_volume += *_volChange;
   set();
+  *_volChange = 0;
 }
 
 void Volume::set() {					// setting the volume to fixed value, between 0 and 127

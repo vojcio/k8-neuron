@@ -63,6 +63,13 @@ void loop() {
     vol.change();
     eprom.notify();
   }
+  
+  if (in.getMuteChange()) {
+    Serial.print("Mute will be enabled");
+    vol.change();
+    eprom.notify();
+  }
+  
   if (in.getSrcChange()) {
     Serial.print("Source will be changed to: "); Serial.println(srcChange);
     inSrc.change();

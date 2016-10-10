@@ -19,6 +19,7 @@ void InputSource::change() {
 
   *_source += *_srcChange;
   set();
+  *_srcChange = 0;
 }
 
 void InputSource::set() {

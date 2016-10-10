@@ -33,17 +33,30 @@ int Inputs::readRotEncSrc() {
   return SrcEncoder.getPosition();
 }
 
+int readMuteButton() {
+  //TODO: write button code
+}
 /*int Inputs::readSerialVol() {
   if (Serial.available() > 0) {
     return Serial.read();
   }
   }
 */
+
+bool Inputs::getMuteChange() {
+
+  int _change = readMuteButton();                         //sum all inputs here
+
+  if (_change > 0) {
+    *_volChange = 128;
+  } else if (_change > 0) {
+    *_volChange = -128;
+  }
+  
+}
 bool Inputs::getVolChange() {
 
   int _change = readRotEncVol();                           // sum all inputs here
-
-  *_volChange = 0;                                        // reset variable
 
   if (_change != 0) {
     if (_change > 0) {

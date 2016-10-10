@@ -17,6 +17,7 @@ class Inputs
     Inputs(float*, int*, int, int, int, int);
     bool getVolChange();
     bool getSrcChange();
+    bool getMuteChange();
   private:
     RotaryEncoder VolEncoder;
     RotaryEncoder SrcEncoder;
