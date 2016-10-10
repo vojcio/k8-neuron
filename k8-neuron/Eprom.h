@@ -8,17 +8,30 @@
 #define Eprom_h
 
 #include "Arduino.h"
-#include "Log.h"
+#include "Logging.h"
 #include <EEPROM.h>
 
 class Eprom
 {
 
   public:
-    Eprom();
-    void save(int what, int val);
-    int get(int what);
+    Eprom(const int, const int, unsigned int*, float*);
+    void periodicInterval(unsigned int);
+    void periodic();
+    void notify();
+    void overrideCurrentVolume();
+    void overrideCurrentSource(); 
   private:
-    Log mBus;
+    Logging mBus;
+    bool _notified;
+    unsigned long _currentMillis;
+    unsigned long _previousMillis;
+    unsigned int _interval;
+    unsigned int* _currentSource;
+    float* _currentVolume;
+    int _epromVolume;
+    int _epromSource;
+    int get(int what);
+    void save(int what, int val);
 };
 #endif

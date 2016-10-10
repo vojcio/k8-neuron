@@ -13,7 +13,7 @@
 #include "Volume.h"                                                       // Volume attenuator library
 #include "Inputs.h"                                                       // Controll the inputs
 #include "InputSource.h"                                                  // Input Source selector
-#include "Log.h"                                                          // Logging class
+#include "Logging.h"                                                          // Logging class
 #include "Eprom.h"                                                        // Library to controll Eeprom
 
 // config
@@ -22,42 +22,52 @@ const int volDownPin = '2';                                               // Rot
 const int srcUpPin = '5';                                                 // RotEnc A terminal for right rotary encoder.
 const int srcDownPin = '4';                                               // RotEnc B terminal for right rotary encoder.
 // logging conf
-const boolean serialLog = 1;                                               // Enables or disables logging to serial output
 const int logLevel = 3;                                                    // Possible log levels: 1 - Error, 2 - Notice, 3 - Debug - disable logging
 const int baudRate = 9600;                                                 // Serial baud rate setting, default = 9600
 float resVals[8] = {64, 32, 16, 8, 4, 2, 1, 0.5};                          // First relay will attenuate by 64db, Eighth relay will attenuate by 0.5db.
 // config end
 
-const int volume = 1;                                                       // constants to point classes (inputs class, eeprom class) to valid execution
-const int source = 2;
+const int epromVolume = 1;                                                       // constants to point classes (inputs class, eeprom class) to valid execution
+const int epromSource = 2;
 
 float volChange = 0;
 int srcChange = 0;
+int currentSource = 1;
+float currentVolume = 5;
 unsigned int maxSrc = 8;
-Volume vol(resVals, &volChange);                                  // Construct volume attenuation class
-InputSource inSrc(&srcChange, maxSrc);                                    // Construct input source class
+Volume vol(resVals, &volChange, &currentVolume);                                  // Construct volume attenuation class
+InputSource inSrc(&srcChange, &currentSource, maxSrc);                                    // Construct input source class
 Inputs in(&volChange, &srcChange, volDownPin, volUpPin, srcUpPin, srcDownPin);                      // Construct inputs
-Log mBus;                                             // Construct log/message bus class
-Eprom eprom;                                          // Construct class to use eeprom
+Logging mBus;                                             // Construct log/message bus class
+Eprom eprom(epromVolume, epromSource, &currentSource, &currentVolume);                                          // Construct class to use eeprom
 
 void setup() {
-  mBus.configure(logLevel, serialLog, baudRate);
-  mBus.debug("Passed message bus configure with loglevel ", String(logLevel));
-  //vol.initMcp();
-  //  vol.set(eprom.get(volume));                                              mBus.debug("setup starting volume, as fast as it can be, to avoid noises", "");
-  //  inSrc.set(eprom.get(source));                                            mBus.debug("setup starting input, as fast as it can be, to avoid unexpected behaviour");
+  mBus.Init(logLevel, baudRate);
+  mBus.Debug("Passed message bus configure with loglevel %d", logLevel);
 
-  mBus.info("MAIN LOOP BEGINS!!", "");
+  //vol.initMcp();
+
+  eprom.overrideCurrentVolume();
+  vol.set();                                              // setup starting volume, as fast as it can be, to avoid noises
+
+  eprom.overrideCurrentSource();
+  inSrc.set();                                            // setup starting input, as fast as it can be, to avoid unexpected behaviour
+
+  mBus.Info("MAIN LOOP BEGINS!!");
+  eprom.periodicInterval(60); //in seconds
 }
 void loop() {
 
   if (in.getVolChange()) {
-    Serial.print("volume will change: "); Serial.println(volChange);
+    Serial.print("volume will be changed to: "); Serial.println(volChange);
     vol.change();
+    eprom.notify();
   }
   if (in.getSrcChange()) {
-    Serial.print("Source will change: "); Serial.println(srcChange);
-    inSrc.change();                                             //mBus.debug("Setting a new input source", "");
+    Serial.print("Source will be changed to: "); Serial.println(srcChange);
+    inSrc.change();
+    eprom.notify();
   }
 
+  eprom.periodic();
 }

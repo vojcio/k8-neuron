@@ -4,11 +4,10 @@
 */
 #include "Arduino.h"
 #include "Inputs.h"
-#include "Log.h"
-#include "Eprom.h"
+#include "Logging.h"
 #include <RotaryEncoder.h>
 
-Inputs::Inputs(float* volChange, int* srcChange, int VOLDOWNPIN, int VOLUPPIN, int SRCDOWNPIN, int SRCUPPIN) : VolEncoder(VOLDOWNPIN, VOLUPPIN), SrcEncoder(SRCDOWNPIN, SRCUPPIN), mBus(), eprom() {
+Inputs::Inputs(float* volChange, int* srcChange, int VOLDOWNPIN, int VOLUPPIN, int SRCDOWNPIN, int SRCUPPIN) : VolEncoder(VOLDOWNPIN, VOLUPPIN), SrcEncoder(SRCDOWNPIN, SRCUPPIN), mBus() {
 
   _volChange = volChange;
   _srcChange = srcChange;
@@ -26,7 +25,6 @@ Inputs::Inputs(float* volChange, int* srcChange, int VOLDOWNPIN, int VOLUPPIN, i
 }
 int Inputs::readRotEncVol() {
   VolEncoder.tick();
-  mBus.info("reading volume rotary encoder", "");
   return VolEncoder.getPosition();
 }
 

@@ -9,18 +9,18 @@
 #define Volume_h
 
 #include "Arduino.h"
-#include "Log.h"							                                            // Logging message bus
+#include "Logging.h"							                                            // Logging message bus
 #include "Adafruit_MCP23008.h"                                            // Library for the I/O expander.
 
 class Volume
 {
   public:
-    Volume(float resVals[], float*);
-    void set(float volume);
+    Volume(float resVals[], float*, float*);
+    void set();
     void change();
     void initMcp();
   private:
-    Log mBus;
+    Logging mBus;
     Adafruit_MCP23008 mcp;
     void increase();
     void decrease();
@@ -30,7 +30,7 @@ class Volume
     int _relDelay;
     int relDelay();
     boolean _relay[];
-    float _volume;
+    float* _volume;
     float* _volChange;
 };
 

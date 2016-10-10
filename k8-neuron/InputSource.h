@@ -7,22 +7,20 @@
 #define InputSource_h
 
 #include "Arduino.h"
-#include "Log.h"
-#include "Eprom.h"                                                        // Library to controll Eeprom
+#include "Logging.h"
 
 class InputSource
 {
 
   public:
-    InputSource(int*, unsigned int);
+    InputSource(int*, unsigned int*, unsigned int);
     void change();
+    void set();
   private:
-    Log mBus;
-    Eprom eprom;
+    Logging mBus;
     int* _srcChange;
     unsigned int _maxSrc;
-    unsigned int _source;
-    void set();
+    unsigned int* _source;
 
 };
 #endif

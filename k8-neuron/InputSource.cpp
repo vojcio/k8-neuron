@@ -6,29 +6,28 @@
 
 #include "Arduino.h"
 #include "InputSource.h"
-#include "Log.h"
-#include "Eprom.h"                                                        // Library to controll Eeprom
+#include "Logging.h"
+                                                        // Library to controll Eeprom
 
-InputSource::InputSource(int* srcChange, unsigned int maxSrc) : eprom(), mBus() {
+InputSource::InputSource(int* srcChange, unsigned int* currentSource, unsigned int maxSrc) : mBus() {
   _srcChange = srcChange;
-  _source = 1;
+  _source = currentSource;
   _maxSrc = maxSrc;
 }
 
 void InputSource::change() {
 
-  _source += *_srcChange;
-
-  if (_source <= 0) {
-    _source = _maxSrc;
-  }  else if (_source > _maxSrc) {
-    _source = 1;
-  }
+  *_source += *_srcChange;
   set();
-  //eprom.save(2, newSource);                                                        // save to eeprom
 }
 
 void InputSource::set() {
-  // TODO: mcp
+
+    if (*_source <= 0) {
+    *_source = _maxSrc;
+  }  else if (*_source > _maxSrc) {
+    *_source = 1;
+  }
+    // TODO: mcp set *_source
 }
 

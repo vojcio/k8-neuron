@@ -7,9 +7,8 @@
 #define Inputs_h
 
 #include "Arduino.h"
-#include "Log.h"
+#include "Logging.h"
 #include <RotaryEncoder.h>                                                // Library for the encoder.
-#include "Eprom.h"
 
 class Inputs
 {
@@ -21,8 +20,7 @@ class Inputs
   private:
     RotaryEncoder VolEncoder;
     RotaryEncoder SrcEncoder;
-    Log mBus;
-    Eprom eprom;
+    Logging mBus;
     int readRotEncVol();
     int readRotEncSrc();
     float* _volChange;
