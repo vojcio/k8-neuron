@@ -7,27 +7,35 @@
 #include "Logging.h"
 #include <RotaryEncoder.h>
 
-Inputs::Inputs(float* volChange, int* srcChange, float* currentVolume, int VOLDOWNPIN, int VOLUPPIN, int SRCDOWNPIN, int SRCUPPIN, int mutePin) : VolEncoder(VOLDOWNPIN, VOLUPPIN), SrcEncoder(SRCDOWNPIN, SRCUPPIN), mBus() {
+Inputs::Inputs(float* volChange, int* srcChange, float* currentVolume) : VolEncoder(_volDownPin, _volUpPin), SrcEncoder(_srcDownPin, _srcUpPin), mBus() {
 
   _volChange = volChange;
   _srcChange = srcChange;
   _currentVolume = currentVolume;
   _volBeforeMute = 0;
-  _mutePin = mutePin;
-  pinMode(VOLUPPIN, INPUT);                                               // Button switch or Encoder pin for volume up
-  digitalWrite(VOLUPPIN, HIGH);                                           // If H/W debouncing is implemented, set to LOW
-  pinMode(VOLDOWNPIN, INPUT);                                             // Button switch or Encoder pin for volume down
-  digitalWrite(VOLDOWNPIN, HIGH);                                         // If H/W debouncing is implemented, set to LOW
-
-  pinMode(SRCUPPIN, INPUT);                                               // Button switch or Encoder pin for src up
-  digitalWrite(SRCUPPIN, HIGH);                                           // If H/W debouncing is implemented, set to LOW
-  pinMode(SRCDOWNPIN, INPUT);                                             // Button switch or Encoder pin for src down
-  digitalWrite(SRCDOWNPIN, HIGH);                                         // If H/W debouncing is implemented, set to LOW
-
+  
 }
 
-void Inputs::initMuteButton() { //TODO: pass pins here
+void Inputs::initRotEncVol(int volUpPin, int volDownPin) {
+  _volUpPin = volUpPin;
+  _volDownPin = volDownPin;
+  pinMode(volUpPin, INPUT);                                               // Button switch or Encoder pin for volume up
+  digitalWrite(volUpPin, HIGH);                                           // If H/W debouncing is implemented, set to LOW
+  pinMode(volDownPin, INPUT);                                             // Button switch or Encoder pin for volume down
+  digitalWrite(volDownPin, HIGH);                                         // If H/W debouncing is implemented, set to LOW
+}
 
+void Inputs::initRotEncSrc(int srcUpPin, int srcDownPin) {
+  _srcUpPin = srcUpPin;
+  _srcDownPin = srcDownPin;
+  pinMode(srcUpPin, INPUT);                                               // Button switch or Encoder pin for src up
+  digitalWrite(srcUpPin, HIGH);                                           // If H/W debouncing is implemented, set to LOW
+  pinMode(srcDownPin, INPUT);                                             // Button switch or Encoder pin for src down
+  digitalWrite(srcDownPin, HIGH);                                         // If H/W debouncing is implemented, set to LOW
+}
+
+void Inputs::initMuteButton(const int mutePin) { //TODO: pass pins here
+  _mutePin = mutePin;
   pinMode(_mutePin, INPUT);
 }
 

@@ -7,7 +7,7 @@
 #include "Arduino.h"
 #include "InputSource.h"
 #include "Logging.h"
-                                                        // Library to controll Eeprom
+// Library to controll Eeprom
 
 InputSource::InputSource(int* srcChange, unsigned int* currentSource, unsigned int maxSrc) : mBus() {
   _srcChange = srcChange;
@@ -24,11 +24,11 @@ void InputSource::change() {
 
 void InputSource::set() {
 
-    if (*_source <= 0) {
+  if (*_source <= 0) {
     *_source = _maxSrc;
   }  else if (*_source > _maxSrc) {
     *_source = 1;
   }
-    // TODO: mcp set *_source
+  // TODO: mcp set *_source
 }
 

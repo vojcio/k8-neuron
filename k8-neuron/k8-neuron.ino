@@ -15,13 +15,17 @@
 #include "InputSource.h"                                                  // Input Source selector
 #include "Logging.h"                                                          // Logging class
 #include "Eprom.h"                                                        // Library to controll Eeprom
+#include <LiquidCrystal.h>
+#include "Lcd.h"
 
-// config
+
+// PINs config
 const int volUpPin = '3';                                                 // RotEnc A terminal for right rotary encoder.
 const int volDownPin = '2';                                               // RotEnc B terminal for right rotary encoder.
 const int srcUpPin = '5';                                                 // RotEnc A terminal for right rotary encoder.
 const int srcDownPin = '4';                                               // RotEnc B terminal for right rotary encoder.
 const int mutePin = '6';                                                  // mute Button pin
+
 // logging conf
 const int logLevel = 3;                                                    // Possible log levels: 1 - Error, 2 - Notice, 3 - Debug - disable logging
 const int baudRate = 9600;                                                 // Serial baud rate setting, default = 9600
@@ -38,41 +42,60 @@ float currentVolume = 5;
 unsigned int maxSrc = 8;
 Volume vol(resVals, &volChange, &currentVolume);                                  // Construct volume attenuation class
 InputSource inSrc(&srcChange, &currentSource, maxSrc);                                    // Construct input source class
-Inputs in(&volChange, &srcChange, &currentVolume, volDownPin, volUpPin, srcUpPin, srcDownPin, mutePin);                      // Construct inputs
+Inputs in(&volChange, &srcChange, &currentVolume);                      // Construct inputs
 Logging mBus;                                             // Construct log/message bus class
 Eprom eprom(epromVolume, epromSource, &currentSource, &currentVolume);                                          // Construct class to use eeprom
+LiquidCrystal lcd(9, 8, 5, 4, 3, 2);
+Lcd screen(&lcd);
 
 void setup() {
-
+  
   //vol.initMcp();
 
-  eprom.overrideCurrentVolume();
-  vol.set();                                              // setup starting volume, as fast as it can be, to avoid noises
+  //eprom.overrideCurrentVolume();
+  //vol.set();                                              // setup starting volume, as fast as it can be, to avoid noises
 
-  eprom.overrideCurrentSource();
-  inSrc.set();                                            // setup starting input, as fast as it can be, to avoid unexpected behaviour
+  //eprom.overrideCurrentSource();
+  //inSrc.set();                                            // setup starting input, as fast as it can be, to avoid unexpected behaviour
 
   mBus.Init(logLevel, baudRate);
   mBus.Debug("Passed message bus configure with loglevel %d", logLevel);
 
-  mBus.Info("MAIN LOOP BEGINS!!");
-  
   eprom.periodicInterval(60); //in seconds
-  in.initMuteButton();             //initialize mute pin button
+  
+  //in.initMuteButton(mutePin);             //initialize mute pin button
+ // in.initRotEncVol(volUpPin, volDownPin);
+ // in.initRotEncSrc(srcUpPin, srcDownPin);
+
+
+screen.DefineLargeChar();
+
+int filter=1;
+  int volume=0;
+
+//  screen.printOneNumber(3);
+
+//screen.test();
 }
 void loop() {
+  delay(1000);
+
+  screen.printOneNumber(9);
+    screen.printTwoNumber(78);
+  delay(10000);
+
 
   if (in.getVolChange()) {
     Serial.print("volume will be changed to: "); Serial.println(volChange);
     vol.change();
     eprom.notify();
   }
-  
+
   if (in.getMuteChange()) {
-    Serial.print("Mute will be enabled");
-    vol.set();
+   // Serial.print("Mute will be enabled");
+ //   vol.set();
   }
-  
+
   if (in.getSrcChange()) {
     Serial.print("Source will be changed to: "); Serial.println(srcChange);
     inSrc.change();
