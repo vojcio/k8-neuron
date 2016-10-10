@@ -7,11 +7,13 @@
 #include "Logging.h"
 #include <RotaryEncoder.h>
 
-Inputs::Inputs(float* volChange, int* srcChange, int VOLDOWNPIN, int VOLUPPIN, int SRCDOWNPIN, int SRCUPPIN) : VolEncoder(VOLDOWNPIN, VOLUPPIN), SrcEncoder(SRCDOWNPIN, SRCUPPIN), mBus() {
+Inputs::Inputs(float* volChange, int* srcChange, float* currentVolume, int VOLDOWNPIN, int VOLUPPIN, int SRCDOWNPIN, int SRCUPPIN, int mutePin) : VolEncoder(VOLDOWNPIN, VOLUPPIN), SrcEncoder(SRCDOWNPIN, SRCUPPIN), mBus() {
 
   _volChange = volChange;
   _srcChange = srcChange;
-
+  _currentVolume = currentVolume;
+  _volBeforeMute = 0;
+  _mutePin = mutePin;
   pinMode(VOLUPPIN, INPUT);                                               // Button switch or Encoder pin for volume up
   digitalWrite(VOLUPPIN, HIGH);                                           // If H/W debouncing is implemented, set to LOW
   pinMode(VOLDOWNPIN, INPUT);                                             // Button switch or Encoder pin for volume down
@@ -23,6 +25,12 @@ Inputs::Inputs(float* volChange, int* srcChange, int VOLDOWNPIN, int VOLUPPIN, i
   digitalWrite(SRCDOWNPIN, HIGH);                                         // If H/W debouncing is implemented, set to LOW
 
 }
+
+void Inputs::initMuteButton() { //TODO: pass pins here
+
+  pinMode(_mutePin, INPUT);
+}
+
 int Inputs::readRotEncVol() {
   VolEncoder.tick();
   return VolEncoder.getPosition();
@@ -33,8 +41,11 @@ int Inputs::readRotEncSrc() {
   return SrcEncoder.getPosition();
 }
 
-int readMuteButton() {
-  //TODO: write button code
+int Inputs::readMuteButton() {
+  int  muteButtonState = digitalRead(_mutePin);
+  if (muteButtonState == HIGH) {
+    return 1;
+  }
 }
 /*int Inputs::readSerialVol() {
   if (Serial.available() > 0) {
@@ -48,11 +59,17 @@ bool Inputs::getMuteChange() {
   int _change = readMuteButton();                         //sum all inputs here
 
   if (_change > 0) {
-    *_volChange = 128;
-  } else if (_change > 0) {
-    *_volChange = -128;
+    if (_volBeforeMute = 0) {
+      _volBeforeMute = *_currentVolume;
+      *_currentVolume = 128;
+    } else {
+      *_currentVolume = _volBeforeMute;
+      _volBeforeMute = 0;
+    }
+    return true;
+  } else {
+    return false;
   }
-  
 }
 bool Inputs::getVolChange() {
 

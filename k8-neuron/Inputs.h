@@ -14,7 +14,8 @@ class Inputs
 {
 
   public:
-    Inputs(float*, int*, int, int, int, int);
+    Inputs(float*, int*, float*, int, int, int, int, int);
+    void initMuteButton();
     bool getVolChange();
     bool getSrcChange();
     bool getMuteChange();
@@ -24,8 +25,12 @@ class Inputs
     Logging mBus;
     int readRotEncVol();
     int readRotEncSrc();
+    int readMuteButton();
     float* _volChange;
     int* _srcChange;
+    float _volBeforeMute;
+    float* _currentVolume;
+    int _mutePin;
 
 };
 #endif

@@ -21,6 +21,7 @@ const int volUpPin = '3';                                                 // Rot
 const int volDownPin = '2';                                               // RotEnc B terminal for right rotary encoder.
 const int srcUpPin = '5';                                                 // RotEnc A terminal for right rotary encoder.
 const int srcDownPin = '4';                                               // RotEnc B terminal for right rotary encoder.
+const int mutePin = '6';                                                  // mute Button pin
 // logging conf
 const int logLevel = 3;                                                    // Possible log levels: 1 - Error, 2 - Notice, 3 - Debug - disable logging
 const int baudRate = 9600;                                                 // Serial baud rate setting, default = 9600
@@ -37,13 +38,11 @@ float currentVolume = 5;
 unsigned int maxSrc = 8;
 Volume vol(resVals, &volChange, &currentVolume);                                  // Construct volume attenuation class
 InputSource inSrc(&srcChange, &currentSource, maxSrc);                                    // Construct input source class
-Inputs in(&volChange, &srcChange, volDownPin, volUpPin, srcUpPin, srcDownPin);                      // Construct inputs
+Inputs in(&volChange, &srcChange, &currentVolume, volDownPin, volUpPin, srcUpPin, srcDownPin, mutePin);                      // Construct inputs
 Logging mBus;                                             // Construct log/message bus class
 Eprom eprom(epromVolume, epromSource, &currentSource, &currentVolume);                                          // Construct class to use eeprom
 
 void setup() {
-  mBus.Init(logLevel, baudRate);
-  mBus.Debug("Passed message bus configure with loglevel %d", logLevel);
 
   //vol.initMcp();
 
@@ -53,8 +52,13 @@ void setup() {
   eprom.overrideCurrentSource();
   inSrc.set();                                            // setup starting input, as fast as it can be, to avoid unexpected behaviour
 
+  mBus.Init(logLevel, baudRate);
+  mBus.Debug("Passed message bus configure with loglevel %d", logLevel);
+
   mBus.Info("MAIN LOOP BEGINS!!");
+  
   eprom.periodicInterval(60); //in seconds
+  in.initMuteButton();             //initialize mute pin button
 }
 void loop() {
 
@@ -66,8 +70,7 @@ void loop() {
   
   if (in.getMuteChange()) {
     Serial.print("Mute will be enabled");
-    vol.change();
-    eprom.notify();
+    vol.set();
   }
   
   if (in.getSrcChange()) {
