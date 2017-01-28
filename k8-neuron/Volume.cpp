@@ -4,6 +4,16 @@
    Original Project Page: http://www.dimdim.gr/diyaudio/la-skala-attenuator/
    Mainentained by vojcio: https://github.com/vojcio/k8-neuron
 */
+/*******************************************************************************************************************
+K8 Neutron is intended to be a fully featured, open source and open hardware pre-amplifier
+
+project by vojcio: https://github.com/vojcio/k8-neuron
+
+Credits:
+La Skala Attenuator: A ladder-type volume attenuator with Arduino control.
+Heavily rewritten version of original project by dimdim.gr:
+Original Project Page: http://www.dimdim.gr/diyaudio/la-skala-attenuator/
+*******************************************************************************************************************/
 
 #include "Arduino.h"
 #include "Volume.h"

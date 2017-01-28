@@ -1,3 +1,10 @@
+/*******************************************************************************************************************
+K8 Neutron is intended to be a fully featured, open source and open hardware pre-amplifier
+
+project by vojcio: https://github.com/vojcio/k8-neuron
+
+Log module for k8-neuron
+*******************************************************************************************************************/
 #include "Logging.h"
 
 void Logging::Init(int level, long baud){
@@ -7,7 +14,7 @@ void Logging::Init(int level, long baud){
 }
 
 void Logging::Error(char* msg, ...){
-    if (LOG_LEVEL_ERRORS <= _level) {   
+    if (LOG_LEVEL_ERRORS <= _level) {
     print ("ERROR: ",0);
         va_list args;
         va_start(args, msg);
@@ -95,7 +102,7 @@ void Logging::Verbose(char* msg, ...){
           Serial.print("T");
         }
         else {
-          Serial.print("F");        
+          Serial.print("F");
         }
         continue;
       }
@@ -104,7 +111,7 @@ void Logging::Verbose(char* msg, ...){
           Serial.print("true");
         }
         else {
-          Serial.print("false");        
+          Serial.print("false");
         }
         continue;
       }
@@ -113,13 +120,5 @@ void Logging::Verbose(char* msg, ...){
         Serial.print(*format);
     }
  }
- 
+
  Logging Log = Logging();
-
- 
- 
-  
-
-
-
-

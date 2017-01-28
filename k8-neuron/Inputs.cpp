@@ -1,7 +1,13 @@
-/*
-   Inputs controll for k8-neuron
-   Mainentained by vojcio: https://github.com/vojcio/laskala
-*/
+
+/*******************************************************************************************************************
+K8 Neutron is intended to be a fully featured, open source and open hardware pre-amplifier
+
+project by vojcio: https://github.com/vojcio/k8-neuron
+
+Inputs controll for k8-neuron
+
+*******************************************************************************************************************/
+
 #include "Arduino.h"
 #include "Inputs.h"
 #include "Logging.h"
@@ -13,7 +19,7 @@ Inputs::Inputs(float* volChange, int* srcChange, float* currentVolume) : VolEnco
   _srcChange = srcChange;
   _currentVolume = currentVolume;
   _volBeforeMute = 0;
-  
+
 }
 
 void Inputs::initRotEncVol(int volUpPin, int volDownPin) {
@@ -113,4 +119,3 @@ bool Inputs::getSrcChange() {
     return false;
   }
 }
-

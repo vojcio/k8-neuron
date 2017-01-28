@@ -1,3 +1,11 @@
+/*******************************************************************************************************************
+K8 Neutron is intended to be a fully featured, open source and open hardware pre-amplifier
+
+project by vojcio: https://github.com/vojcio/k8-neuron
+
+Log module for k8-neuron
+*******************************************************************************************************************/
+
 #ifndef LOGGING_H
 #define LOGGING_H
 #include <inttypes.h>
@@ -13,14 +21,14 @@ extern "C" {
 }
 
 
-#define LOG_LEVEL_NOOUTPUT 0 
+#define LOG_LEVEL_NOOUTPUT 0
 #define LOG_LEVEL_ERRORS 1
 #define LOG_LEVEL_INFOS 2
 #define LOG_LEVEL_DEBUG 3
 #define LOG_LEVEL_VERBOSE 4
 
 // default loglevel if nothing is set from user
-#define LOGLEVEL LOG_LEVEL_DEBUG 
+#define LOGLEVEL LOG_LEVEL_DEBUG
 
 
 #define CR "\r\n"
@@ -73,19 +81,19 @@ private:
     int _level;
     long _baud;
 public:
-    /*! 
+    /*!
    * default Constructor
    */
     Logging(){} ;
-  
-    /** 
+
+    /**
   * Initializing, must be called as first.
   * \param void
   * \return void
   *
   */
   void Init(int level, long baud);
-  
+
     /**
   * Output an error message. Output message contains
   * ERROR: followed by original msg
@@ -96,7 +104,7 @@ public:
   * \return void
   */
     void Error(char* msg, ...);
-  
+
     /**
   * Output an info message. Output message contains
   * Info messages are printed out at l
@@ -108,7 +116,7 @@ public:
   */
 
    void Info(char* msg, ...);
-  
+
     /**
   * Output an debug message. Output message contains
   * Debug messages are printed out at l
@@ -120,7 +128,7 @@ public:
   */
 
     void Debug(char* msg, ...);
-  
+
     /**
   * Output an verbose message. Output message contains
   * Debug messages are printed out at l
@@ -131,16 +139,12 @@ public:
   * \return void
   */
 
-    void Verbose(char* msg, ...);   
+    void Verbose(char* msg, ...);
 
-    
+
 private:
     void print(const char *format, va_list args);
 };
 
 extern Logging Log;
 #endif
-
-
-
-

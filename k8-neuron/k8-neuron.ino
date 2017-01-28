@@ -3,13 +3,10 @@
 
   project by vojcio: https://github.com/vojcio/k8-neuron
 
-  credits:
-  Volume atenuator algorithm originally from: http://www.dimdim.gr/diyaudio/la-skala-attenuator/
-
  *******************************************************************************************************************/
 
 #include <Wire.h>                                                         // Library for the I2C communication.
-#include "Arduino.h"                                                      // Basic Arduino library 
+#include "Arduino.h"                                                      // Basic Arduino library
 #include "Volume.h"                                                       // Volume attenuator library
 #include "Inputs.h"                                                       // Controll the inputs
 #include "InputSource.h"                                                  // Input Source selector
@@ -49,7 +46,7 @@ LiquidCrystal lcd(9, 8, 5, 4, 3, 2);
 Lcd screen(&lcd);
 
 void setup() {
-  
+
   //vol.initMcp();
 
   //eprom.overrideCurrentVolume();
@@ -62,7 +59,7 @@ void setup() {
   mBus.Debug("Passed message bus configure with loglevel %d", logLevel);
 
   eprom.periodicInterval(60); //in seconds
-  
+
   //in.initMuteButton(mutePin);             //initialize mute pin button
  // in.initRotEncVol(volUpPin, volDownPin);
  // in.initRotEncSrc(srcUpPin, srcDownPin);

@@ -1,7 +1,13 @@
-/*
-   Inputs controll for k8-neuron
-   Mainentained by vojcio: https://github.com/vojcio/laskala
-*/
+
+/*******************************************************************************************************************
+K8 Neutron is intended to be a fully featured, open source and open hardware pre-amplifier
+
+project by vojcio: https://github.com/vojcio/k8-neuron
+
+Inputs controll for k8-neuron
+
+*******************************************************************************************************************/
+
 
 #ifndef Inputs_h
 #define Inputs_h

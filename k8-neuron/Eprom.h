@@ -1,7 +1,11 @@
-/*
-   Library to controll persistant values for k8-neuron
-   Mainentained by vojcio: https://github.com/vojcio/laskala
-*/
+/*******************************************************************************************************************
+K8 Neutron is intended to be a fully featured, open source and open hardware pre-amplifier
+
+project by vojcio: https://github.com/vojcio/k8-neuron
+
+Library to controll persistant values for k8-neuron
+*******************************************************************************************************************/
+
 
 
 #ifndef Eprom_h
@@ -20,7 +24,7 @@ class Eprom
     void periodic();
     void notify();
     void overrideCurrentVolume();
-    void overrideCurrentSource(); 
+    void overrideCurrentSource();
   private:
     Logging mBus;
     bool _notified;
