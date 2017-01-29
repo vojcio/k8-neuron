@@ -1,17 +1,13 @@
-
-/*******************************************************************************************************************
+/******************************************************************************************************************
 K8 Neutron is intended to be a fully featured, open source and open hardware pre-amplifier
-
 project by vojcio: https://github.com/vojcio/k8-neuron
-
 Inputs controll for k8-neuron
-
 *******************************************************************************************************************/
 
 #include "Arduino.h"
 #include "Inputs.h"
 #include "Logging.h"
-#include "libraries/RotaryEncoder.h"
+#include "RotaryEncoder.h"
 
 Inputs::Inputs(float* volChange, int* srcChange, float* currentVolume) : VolEncoder(_volDownPin, _volUpPin), SrcEncoder(_srcDownPin, _srcUpPin), mBus() {
 

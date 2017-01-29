@@ -14,7 +14,7 @@
 #include "Eprom.h"                                                        // Library to controll Eeprom
 #include <LiquidCrystal.h>
 #include "Lcd.h"
-#include "libraries/PCF8574.h"
+#include "PCF8574.h"
 
 
 // PINs config
@@ -35,7 +35,7 @@ const int epromSource = 2;
 
 float volChange = 0;
 int srcChange = 0;
-int currentSource = 1;
+unsigned int currentSource = 1;
 float currentVolume = 5;
 unsigned int maxSrc = 8;
 Volume vol(resVals, &volChange, &currentVolume);                                  // Construct volume attenuation class
@@ -45,6 +45,7 @@ Logging mBus;                                             // Construct log/messa
 Eprom eprom(epromVolume, epromSource, &currentSource, &currentVolume);                                          // Construct class to use eeprom
 LiquidCrystal lcd(9, 8, 5, 4, 3, 2);
 Lcd screen(&lcd);
+
 
 void setup() {
 
@@ -57,7 +58,7 @@ void setup() {
   //inSrc.set();                                            // setup starting input, as fast as it can be, to avoid unexpected behaviour
 
   mBus.Init(logLevel, baudRate);
-  mBus.Debug("Passed message bus configure with loglevel %d", logLevel);
+ // mBus.Debug("Passed message bus configure with loglevel %d", logLevel);
 
   eprom.periodicInterval(60); //in seconds
 
@@ -84,9 +85,9 @@ void loop() {
 
 
   if (in.getVolChange()) {
-    Serial.print("volume will be changed to: "); Serial.println(volChange);
-    vol.change();
-    eprom.notify();
+ //   Serial.print("volume will be changed to: "); Serial.println(volChange);
+ //   vol.change();
+  //  eprom.notify();
   }
 
   if (in.getMuteChange()) {
@@ -95,9 +96,9 @@ void loop() {
   }
 
   if (in.getSrcChange()) {
-    Serial.print("Source will be changed to: "); Serial.println(srcChange);
-    inSrc.change();
-    eprom.notify();
+  //  Serial.print("Source will be changed to: "); Serial.println(srcChange);
+ //   inSrc.change();
+ //   eprom.notify();
   }
 
   eprom.periodic();
