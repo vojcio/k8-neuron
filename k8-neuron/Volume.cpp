@@ -12,7 +12,7 @@ Original Project Page: http://www.dimdim.gr/diyaudio/la-skala-attenuator/
 #include "Arduino.h"
 #include "Volume.h"
 #include "Logging.h"
-#include "Adafruit_MCP23008.h"                                            // Library for the I/O expander.
+#include "libraries/Adafruit_MCP23008.h"                                            // Library for the I/O expander.
 
 Volume::Volume(float resVals[], float* volChange, float* currentVolume) : mBus(), mcp() {
 
@@ -81,7 +81,7 @@ void Volume::increase() {
       mBus.Info("(increasingVol ; Scheduling relay to disable: %d", _relay[i]);
     }
     else mcp.digitalWrite(i, HIGH);
-    mBus.Info("(increasingVol ; Scheduling relay to enable: %d", _relay[i]);
+      mBus.Info("(increasingVol ; Scheduling relay to enable: %d", _relay[i]);
   }
 }
 
@@ -92,8 +92,8 @@ void Volume::decrease() {
       mBus.Info("(decreaseingVol ; Scheduling relay to disable: %d", _relay[i]);
     }
     else mcp.digitalWrite(i, HIGH);
-    mBus.Info("(decreaseingVol ; Scheduling relay to enable: %d", _relay[i]);
-    delay(relDelay());
+      mBus.Info("(decreaseingVol ; Scheduling relay to enable: %d", _relay[i]);
+      delay(relDelay());
   }
 }
 

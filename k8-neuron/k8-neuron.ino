@@ -14,6 +14,7 @@
 #include "Eprom.h"                                                        // Library to controll Eeprom
 #include <LiquidCrystal.h>
 #include "Lcd.h"
+#include "libraries/PCF8574.h"
 
 
 // PINs config
@@ -78,7 +79,7 @@ void loop() {
   delay(1000);
 
   screen.printOneNumber(9);
-    screen.printTwoNumber(78);
+  screen.printTwoNumber(78);
   delay(10000);
 
 

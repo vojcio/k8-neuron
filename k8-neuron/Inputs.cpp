@@ -11,7 +11,7 @@ Inputs controll for k8-neuron
 #include "Arduino.h"
 #include "Inputs.h"
 #include "Logging.h"
-#include <RotaryEncoder.h>
+#include "libraries/RotaryEncoder.h"
 
 Inputs::Inputs(float* volChange, int* srcChange, float* currentVolume) : VolEncoder(_volDownPin, _volUpPin), SrcEncoder(_srcDownPin, _srcUpPin), mBus() {
 

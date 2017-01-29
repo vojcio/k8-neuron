@@ -14,7 +14,7 @@ Original Project Page: http://www.dimdim.gr/diyaudio/la-skala-attenuator/
 
 #include "Arduino.h"
 #include "Logging.h"							                                            // Logging message bus
-#include "Adafruit_MCP23008.h"                                            // Library for the I/O expander.
+#include "libraries/Adafruit_MCP23008.h"                                            // Library for the I/O expander.
 
 class Volume
 {

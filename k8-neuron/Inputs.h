@@ -14,7 +14,7 @@ Inputs controll for k8-neuron
 
 #include "Arduino.h"
 #include "Logging.h"
-#include <RotaryEncoder.h>                                                // Library for the encoder.
+#include "libraries/RotaryEncoder.h"
 
 class Inputs
 {
