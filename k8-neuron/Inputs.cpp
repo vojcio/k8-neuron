@@ -8,6 +8,7 @@ Inputs controll for k8-neuron
 #include "Inputs.h"
 #include "Logging.h"
 #include "RotaryEncoder.h"
+#include "pcf8574.h"
 
 Inputs::Inputs(float* volChange, int* srcChange, float* currentVolume) : VolEncoder(_volDownPin, _volUpPin), SrcEncoder(_srcDownPin, _srcUpPin), mBus() {
 

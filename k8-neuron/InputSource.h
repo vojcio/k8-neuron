@@ -12,6 +12,7 @@ Input source changer for k8-neuron
 
 #include "Arduino.h"
 #include "Logging.h"
+#include "pcf8574.h"
 
 class InputSource
 {

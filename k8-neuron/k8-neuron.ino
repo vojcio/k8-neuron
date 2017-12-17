@@ -14,7 +14,7 @@
 #include "Eprom.h"                                                        // Library to controll Eeprom
 #include <LiquidCrystal.h>
 #include "Lcd.h"
-#include "PCF8574.h"
+#include "pcf8574.h"
 
 
 // PINs config
@@ -46,9 +46,17 @@ Eprom eprom(epromVolume, epromSource, &currentSource, &currentVolume);          
 LiquidCrystal lcd(9, 8, 5, 4, 3, 2);
 Lcd screen(&lcd);
 
+PCF8574 PCF_38(0x20);
 
 void setup() {
 
+  Wire.begin();
+ 
+  Serial.begin(baudRate);
+  while (!Serial);             // Leonardo: wait for serial monitor
+  Serial.println("\nStarting serial");
+
+ 
   //vol.initMcp();
 
   //eprom.overrideCurrentVolume();
@@ -57,7 +65,7 @@ void setup() {
   //eprom.overrideCurrentSource();
   //inSrc.set();                                            // setup starting input, as fast as it can be, to avoid unexpected behaviour
 
-  mBus.Init(logLevel, baudRate);
+ // mBus.Init(logLevel, baudRate);
  // mBus.Debug("Passed message bus configure with loglevel %d", logLevel);
 
   eprom.periodicInterval(60); //in seconds
@@ -77,11 +85,23 @@ int filter=1;
 //screen.test();
 }
 void loop() {
+  Serial.println("\nloop start");
+
+  for (int i=0; i<8; i++)
+  {
+    PCF_38.write8(1);
+    delay(100);
+    PCF_38.write8(0);
+    delay(100);
+  }  
+
+
+  
   delay(1000);
 
-  screen.printOneNumber(9);
-  screen.printTwoNumber(78);
-  delay(10000);
+//  screen.printOneNumber(9);
+//  screen.printTwoNumber(78);
+//  delay(10000);
 
 
   if (in.getVolChange()) {
